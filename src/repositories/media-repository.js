@@ -1,0 +1,28 @@
+import fs from 'fs';
+import path from "path";
+import config from '../config/config';
+import models from '../models';
+const { media } = models;
+const { Op, literal } = models.Sequelize;
+export default {
+    async createFile({ params, file, headers, connection }) {
+        try {
+            let result ='';
+            const mediaType = params.mediaType;
+            const imageDir = path.join(__dirname, `../../${file.path}`);
+            const HTTPs = connection.encrypted === undefined ? 'http' : 'httpStatus';
+            const mediaData = {
+                name: file.filename || file.originalname,
+                basePath: file.path,
+                imagePath: imageDir,
+                baseUrl: `${HTTPs}://${headers.host}/${file.path}`,
+                mediaType,
+            }
+            result = await media.create(mediaData);
+            return result;
+        } catch (error) {
+            console.log(error);
+            throw Error(error);
+        }
+    }
+}
