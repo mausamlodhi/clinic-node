@@ -11,7 +11,10 @@ const {validateMiddleware} = middlewares;
 router.post("/doctor/signup",
 validateMiddleware({ schema: accountValidator.userCreateSchema }),
 accountController.signup);
-router.post('/patient/signup', accountController.signup); 
+
+router.post('/patient/signup',
+validateMiddleware({ schema: accountValidator.userCreateSchema }),
+ accountController.signup); 
 
 router.post("/doctor/login", 
 validateMiddleware({ schema: accountValidator.loginSchema })
@@ -26,10 +29,10 @@ router.post(
 router.post(
     '/admin/login',
     validateMiddleware({ schema: accountValidator.loginSchema }),
-    accountController.login,
+    accountController.adminLogin,
   );
 
-// router.post('/doctor/forgot-password', doctorController.doctorForgotPassword);
+router.post('/doctor/forgot-password', accountController.doctorForgotPassword);
 
-//router.post('/doctor/reset-password', doctorController.resetDoctorPassword);
+router.post('/doctor/reset-password', accountController.resetDoctorPassword);
 export default router;

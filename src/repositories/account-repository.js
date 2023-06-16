@@ -7,7 +7,7 @@ import Email from '../services/email';
 
 const { commonConstant } = constant;
 
-const { user } = models;
+const { user, admin } = models;
 export default {
     /**
    * Check doctor email and password for login
@@ -35,7 +35,27 @@ export default {
             console.log(error)
         }
     },
+    async adminLogin(req, res, next) {
+        try {
+            const { email, password } = req.body;
+            const userResult = await admin.findOne({ where: { email: email } });
+            if (userResult) {
+                const isPasswordMatch = await bcrypt.compare(password, userResult.password);
 
+                if (isPasswordMatch) {
+                    // here token will be created and send the reponse 
+                    const { ...userData } = userResult.get();
+                    const token = jwt.createToken(userData);
+                    return { token, ...userData };
+                }
+            }
+            else {
+                return { status: commonConstant.STATUS.INVALID };
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    },
     async userSignup(req) {
         const transaction = await models.sequelize.transaction();
         try {

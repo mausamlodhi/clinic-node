@@ -31,16 +31,14 @@ module.exports = (sequelize, DataTypes) => {
             passwordResetToken: {
                 type: DataTypes.STRING(191),
             },
-            profileImageUrl: {
-                type: DataTypes.VIRTUAL,
-                // get() {
-                //   const str = this.get('profileImage');
-                //   if (!str || !utility.isFileExist(str)) {
-                //     return defaultUserImage;
-                //   }
-                //   return (str && `${config.app.baseUrl}${str}`) || '';
-                // },
-            },
+            profileImage: {
+                type: DataTypes.STRING,
+                set(val) {
+                  let tmpStr = val;
+                  tmpStr = tmpStr.replace(/\\/g, '/');
+                  this.setDataValue('profileImage', tmpStr);
+                },
+              },
             userRole: {
                 type: DataTypes.STRING(20)
             }
