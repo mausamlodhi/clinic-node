@@ -4,7 +4,7 @@ import config from '../config';
 export default {
   createToken(payload) {
     return jwt.sign(payload, config.jwtSecret, {
-      expiresIn: config.jwtExpireIn,
+      expiresIn: '1h',
     });
   },
   verifyToken(token) {

@@ -18,9 +18,10 @@ export default {
         try {
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
+            console.log("User Data : "+ userResult.email);
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
-
+                console.log("Password Match : "+isPasswordMatch);
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();

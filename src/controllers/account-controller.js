@@ -12,7 +12,7 @@ export default {
          */
     async signup(req, res, next) {
         try {
-            //console.log(req.body);
+            console.log(req.body);
             const userSignup = await accountRepository.userSignup(req);
             if (userSignup) {
                 res.status(HttpStatus.OK).json({
@@ -41,7 +41,7 @@ export default {
         try {
             const user = await accountRepository.checkLogin(req);
             console.log(user);
-            if (user.token) {
+            if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
                     data: user,
