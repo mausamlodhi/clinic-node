@@ -1,14 +1,10 @@
-import bodyParser from "body-parser";;
-import model from "./models/index.js"
-import cors from 'cors';
-import helmet from "helmet";
-import newSequelize from "./services/dbConfig.js";
+import bodyParser from "body-parser";
+import model from "./models/index.js";
 import config from "./config/config.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import compression from "compression";
 import methodOverride from "method-override";
 import express from "express"; 
-import {fileURLToPath} from "url";
 import path, { dirname } from "path";
 import routes from './routes/index.js';
 import swaggerUi from "swagger-ui-express";
@@ -44,7 +40,6 @@ export default class Bootstrap{
             apis : ['./api-documents/*.yml']
         };
         const swaggerFunction = swaggerJSDoc(options);
-        console.log("Swagger : "+swaggerFunction);
         app.use(compression());
         app.use(methodOverride());
         app.use(bodyParser.urlencoded({extended:true}));

@@ -9,7 +9,7 @@ export default {
   },
   verifyToken(token) {
     return jwt.verify(token, config.jwtSecret, {
-      expiresIn: config.jwtExpireIn,
+      expiresIn: '1h',
     });
   }
 };

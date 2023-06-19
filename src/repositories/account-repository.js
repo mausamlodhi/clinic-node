@@ -18,10 +18,8 @@ export default {
         try {
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
-            console.log("User Data : "+ userResult.email);
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
-                console.log("Password Match : "+isPasswordMatch);
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
@@ -35,6 +33,27 @@ export default {
         } catch (error) {
             console.log(error)
         }
+    },
+    async verifyUser(token){
+        try{
+            const validUser = jwt.verifyToken(token);
+            return true;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+    async signout(req,res,next){
+        try{
+            console.log("Token : "+req.body.credential);
+            console.log("Token : "+req.body.email);
+            const isValid = await this.verifyUser(req.body.credential);
+            const checkUser = await user.findOneAndUpdate({email : req.body.email},{});
+            return true;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }     
     },
     async adminLogin(req, res, next) {
         try {
@@ -149,6 +168,30 @@ export default {
             throw Error(error);
         }
     },
-
-
+    async getUserData(email){
+        try{
+            const userData = await user.findOne({email});
+            return userData;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+    async updateProfile(data,email){
+        try{
+            console.log("22 : "+email);
+            const userData = await this.getUserData(email);
+            let firstName = data?.firstName || userData.firstName;
+            let lastName = data?.lastName || userData.lastName;
+            let contact = data?.contact || userData?.contact;
+            let gender = data?.gender || userData?.gender;
+            let specialization = data?.specialization || userData?.specialization;
+            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender,specialization},{where:{email : userData.email}});
+            console.log(result);
+            return result;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    }
 }

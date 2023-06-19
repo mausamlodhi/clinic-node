@@ -1,3 +1,4 @@
+import user from "../models/user";
 import repositories from "../repositories";
 import HttpStatus from "http-status";
 
@@ -31,6 +32,24 @@ export default {
         }
     },
 
+    async logout(req,res,next){
+        try{
+            if(await accountRepository.signout(req,res,next))
+                return res.status(HttpStatus.OK).json({
+                    success : true,
+                    message : null
+                });
+            else
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    success : false,
+                    message : "User doesn't exists"
+                })
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+
     /**
      * login doctor
      * @param {Object} req
@@ -40,7 +59,6 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
-            console.log(user);
             if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -93,12 +111,6 @@ export default {
             console.log(error);
         }
     },
-    /**
-             * login admin
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
     async adminLogin(req, res, next) {
         try {
             const user = await accountRepository.adminLogin(req);
@@ -123,13 +135,6 @@ export default {
             console.log(error);
         }
     },
-
-    /**
-             * reset password 
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
     async resetDoctorPassword(req, res) {
         try {
             const user = await accountRepository.resetDoctorPassword(req);
@@ -147,6 +152,20 @@ export default {
             }
         } catch (error) {
             console.log(error);
+            throw Error(error);
+        }
+    },
+    async updateProfile(req,res,next){
+        try{
+            console.log("Email : "+req.body.email);
+            const updatedUser = await accountRepository.updateProfile(req.body,req.body.email);
+            return res.status(HttpStatus.OK).json({
+                success : true,
+                message : "Profile Updated..."
+            })
+        }catch(error){
+            console.log(error);
+            throw Error(error);
         }
     }
 
