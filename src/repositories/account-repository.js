@@ -179,6 +179,7 @@ export default {
     },
     async updateProfile(data,email){
         try{
+            console.log("Mausam : "+data)
             console.log("22 : "+email);
             const userData = await this.getUserData(email);
             let firstName = data?.firstName || userData.firstName;
@@ -186,7 +187,7 @@ export default {
             let contact = data?.contact || userData?.contact;
             let gender = data?.gender || userData?.gender;
             let specialization = data?.specialization || userData?.specialization;
-            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender,specialization},{where:{email : userData.email}});
+            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender,specialization},{where:{email : email}});
             console.log(result);
             return result;
         }catch(error){

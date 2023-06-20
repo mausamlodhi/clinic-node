@@ -64,7 +64,7 @@ export default {
                     success: true,
                     data: user,
                 });
-            } else if (user.status === 'inactive') {
+            } else if (user?.status === 'inactive') {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
                     data: [],
@@ -157,8 +157,8 @@ export default {
     },
     async updateProfile(req,res,next){
         try{
-            console.log("Email : "+req.body.email);
-            const updatedUser = await accountRepository.updateProfile(req.body,req.body.email);
+            console.log("Email : "+req.body.user);
+            const updatedUser = await accountRepository.updateProfile(req.body,req.body.user);
             return res.status(HttpStatus.OK).json({
                 success : true,
                 message : "Profile Updated..."
