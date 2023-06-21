@@ -80,19 +80,20 @@ export default {
             throw Error(error);
         }
     },
-    async doctorForgotPassword(req) {
+    async forgotPassword(req) {
         try {
-
-            const userResult = await doctor.findOne({ where: { email: req.body.email } });
+            const userResult = await user.findOne({ where: { email: req.body.email } });
+            console.log("inside forget password userResult===========================")
             console.log(userResult.dataValues);
             if (userResult) {
                 req.forgotUser = userResult;
                 const data = {
                     to: userResult.dataValues.email,
-                    name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
+                    // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
                 };
                 const result = await this.generatePasswordResetToken(req);
                 data.token = result.passwordResetToken;
+                console.log("about email.sendotp.......................")
                 return await Email.sendOtp(data)
                     .then(() => ({ status: 'sent' }))
                     .catch((error) => ({ status: 'send_error', error }));
@@ -103,11 +104,12 @@ export default {
         };
 
     },
-
     async generatePasswordResetToken(req) {
+        const { forgotUser } = req;
         try {
-            const token = utility.generateRandomString(10);
+            const token = utility.generateRandomString(32);
             const userData = { passwordResetToken: token };
+            await forgotUser.update(userData);
             return userData;
         } catch (error) {
             throw Error(error);
@@ -116,8 +118,12 @@ export default {
 
     async resetDoctorPassword(req) {
         try {
-            const { token, newPassword } = req.body;
-            const userResult = await doctor.findOne({ passwordResetToken: token });
+            const{id} = req.params;
+            const { newPassword } = req.body;
+            console.log(id)
+            const userResult = await user.findOne({where:{ password_reset_token: id }});
+            console.log(userResult);
+            
             if (userResult) {
                 await this.updatePassword(userResult, newPassword);
                 return true;
