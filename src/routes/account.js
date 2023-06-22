@@ -27,4 +27,5 @@ router.post("/logout",accountController.logout);
 router.post('/doctor/forgot-password', accountController.doctorForgotPassword);
 router.post('/doctor/reset-password', accountController.resetDoctorPassword);
 router.post('/update-profile',accountController.updateProfile);
+router.post("/doctorClinic",)
 export default router;

@@ -10,6 +10,7 @@ const sequelize = new Sequelize(dbConfig.db, dbConfig.user, dbConfig.password, {
   host: dbConfig.host,
   port: dbConfig.port,
   dialect: 'mysql',
+  logging:false
 });
 
 
@@ -22,6 +23,10 @@ fs.readdirSync(__dirname)
     );
     db[model.name] = model;
   });
+  Object.keys(db).forEach((modelName)=>{
+    if(db[modelName].associate)
+      db[modelName].associate(db);
+  })
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

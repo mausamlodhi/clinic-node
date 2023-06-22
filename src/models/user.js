@@ -49,5 +49,15 @@ module.exports = (sequelize, DataTypes) => {
             underscored: true,
         }
     );
+    user.associate = (model)=>{
+        user.hasOne(model.doctorClinic,{
+            foreignKey : "doctorId",
+            onDelete : "cascade"
+        });
+        user.hasMany(model.clinicPatient,{
+            foreignKey : "patientId",
+            onDelete : "cascade"
+        })
+    }
     return user;
 }

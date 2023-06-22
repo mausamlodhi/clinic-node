@@ -48,7 +48,7 @@ export default {
             console.log("Token : "+req.body.credential);
             console.log("Token : "+req.body.email);
             const isValid = await this.verifyUser(req.body.credential);
-            const checkUser = await user.findOneAndUpdate({email : req.body.email},{});
+            const checkUser = await admin.update({createdAt:null},{ where:{email : req.body.email}});
             return true;
         }catch(error){
             console.log(error);

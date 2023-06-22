@@ -113,6 +113,7 @@ export default {
     },
     async adminLogin(req, res, next) {
         try {
+            console.log("Login called....")
             const user = await accountRepository.adminLogin(req);
             console.log(user);
             if (user.token) {
