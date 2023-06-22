@@ -6,26 +6,21 @@ const router = Router();
 const { accountController } = controllers;
 const { accountValidator } = validations;
 const {validateMiddleware} = middlewares;
-router.post("/doctor/signup",accountController.signup);
-router.post('/patient/signup',
+  
+router.post("/signup",
 validateMiddleware({ schema: accountValidator.userCreateSchema }),
- accountController.signup); 
-router.post("/doctor/login", 
+accountController.signup);
+
+router.post("/login", 
 validateMiddleware({ schema: accountValidator.loginSchema })
 ,accountController.login);
-router.post(
-    '/patient/login',
-    validateMiddleware({ schema: accountValidator.loginSchema }),
-    accountController.login,
-  );
 router.post(
     '/admin/login',
     validateMiddleware({ schema: accountValidator.loginSchema }),
     accountController.adminLogin,
   );
-router.post("/logout",accountController.logout);
-router.post('/doctor/forgot-password', accountController.doctorForgotPassword);
-router.post('/doctor/reset-password', accountController.resetDoctorPassword);
-router.post('/update-profile',accountController.updateProfile);
-router.post("/doctorClinic",)
+
+router.post('/account/forgot-password', accountController.forgotPassword);
+
+//router.post('/account/reset-password/:id', accountController.resetPassword);
 export default router;

@@ -7,10 +7,10 @@ import Email from '../services/email';
 
 const { commonConstant } = constant;
 
-const { user, admin } = models;
+const { user,role,userRole } = models;
 export default {
     /**
-   * Check doctor email and password for login
+   * Check user email and password for login
    * @param {Object} req
    * @returns
    */
@@ -58,7 +58,7 @@ export default {
     async adminLogin(req, res, next) {
         try {
             const { email, password } = req.body;
-            const userResult = await admin.findOne({ where: { email: email } });
+            const userResult = await user.findOne({ where: { email: email } });
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
 
@@ -76,19 +76,31 @@ export default {
             console.log(error)
         }
     },
+     /**
+   * Check data for user sign up
+   * @param {Object} req
+   * @returns
+   */
     async userSignup(req) {
         const transaction = await models.sequelize.transaction();
         try {
             const userResult = await user.findOne({ where: { email: req.body.email } });
             if (!userResult) {
                 const bodyData = req.body;
+                //let hashPassword= this.createHashPassword(bodyData.password);
                 const salt = await bcrypt.genSalt();
                 const hashPassword = await bcrypt.hash(bodyData.password, salt);
                 bodyData.password = hashPassword;
-                let role = req.body.userRole;
-                console.log(role);
-                let a = await user.create(bodyData, { transaction });
-                await transaction.commit();
+                const userData = await user.create(bodyData, { transaction });
+                const roleData = await role.findOne({ where: { role: commonConstant.ROLE.USER } });
+                if (userData) {
+                    const data = {
+                        userId: userData.id,
+                        roleId: roleData.id,
+                    };
+                    await userRole.create(data, { transaction });
+                    await transaction.commit();
+                }
                 return true;
             }
             else {
@@ -100,16 +112,14 @@ export default {
             throw Error(error);
         }
     },
-    async doctorForgotPassword(req) {
+    async forgotPassword(req) {
         try {
-
-            const userResult = await doctor.findOne({ where: { email: req.body.email } });
-            console.log(userResult.dataValues);
+            const userResult = await user.findOne({ where: { email: req.body.email } });
             if (userResult) {
                 req.forgotUser = userResult;
                 const data = {
                     to: userResult.dataValues.email,
-                    name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
+                    // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
                 };
                 const result = await this.generatePasswordResetToken(req);
                 data.token = result.passwordResetToken;
@@ -123,21 +133,25 @@ export default {
         };
 
     },
-
     async generatePasswordResetToken(req) {
+        const { forgotUser } = req;
         try {
-            const token = utility.generateRandomString(10);
+            const token = utility.generateRandomString(32);
             const userData = { passwordResetToken: token };
+            await forgotUser.update(userData);
             return userData;
         } catch (error) {
             throw Error(error);
         }
     },
-
     async resetDoctorPassword(req) {
         try {
-            const { token, newPassword } = req.body;
-            const userResult = await doctor.findOne({ passwordResetToken: token });
+            const { id } = req.params;
+            const { newPassword } = req.body;
+            console.log(id)
+            const userResult = await user.findOne({ where: { password_reset_token: id } });
+            console.log(userResult);
+
             if (userResult) {
                 await this.updatePassword(userResult, newPassword);
                 return true;
@@ -148,7 +162,6 @@ export default {
             throw Error(error);
         }
     },
-
     async updatePassword(userObject, newPassword) {
         try {
             const hashPassword = await this.createHashPassword(newPassword);
@@ -186,13 +199,22 @@ export default {
             let lastName = data?.lastName || userData.lastName;
             let contact = data?.contact || userData?.contact;
             let gender = data?.gender || userData?.gender;
-            let specialization = data?.specialization || userData?.specialization;
-            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender,specialization},{where:{email : email}});
+            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender},{where:{email : userData.email}});
             console.log(result);
             return result;
         }catch(error){
             console.log(error);
             throw Error(error);
         }
-    }
+    },
+    async getUserData(email){
+        try{
+            const userData = await user.findOne({email});
+            return userData;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+
 }

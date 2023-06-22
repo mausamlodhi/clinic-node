@@ -29,7 +29,7 @@ module.exports = (sequelize,DataTypes)=>{
             onDelete : "cascade"
         });
         clinic.hasMany(model.user,{
-            foreignKey : "patientId",
+            foreignKey : "id",
             onDElete : "cascade"
         })
         

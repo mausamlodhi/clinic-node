@@ -52,7 +52,7 @@ export default class Bootstrap{
         const {sequelize} = model;
         sequelize.authenticate().then((res)=>{
             sequelize.sync().then(()=>{console.log("")}).catch(err=>{console.log(err)})
-            console.log("Database connected successfully")
+            console.log("\n\t\tDo Your Work...!");
         }).catch((error)=>{
             console.log(error);
         })
@@ -63,7 +63,7 @@ export default class Bootstrap{
     start(){
         const {app}=this;
         const port = app.get("port");
-        const server = app.listen(port,()=>{console.log("Server connected on port %d",port)});
+        const server = app.listen(port);
         
     }
 }

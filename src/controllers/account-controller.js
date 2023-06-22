@@ -85,23 +85,17 @@ export default {
              * @param {Object} res
              * @param {Function} next
              */
-    async doctorForgotPassword(req, res, next) {
+    async forgotPassword(req, res, next) {
         try {
-            const result = await accountRepository.doctorForgotPassword(req);
+            const result = await accountRepository.forgotPassword(req);
+            console.log(result)
             if (result) {
-                if (result.status === 'inactive') {
-                    res.status(HttpStatus.BAD_REQUEST).json({
-                        success: false,
-                        data: result,
-                    });
-                }
-                else {
-                    res.status(HttpStatus.OK).json({
-                        success: true,
-                        data: null,
-                    });
-                }
-            } else {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: result,
+                });
+            }
+            else {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
                     data: null,
@@ -168,7 +162,29 @@ export default {
             console.log(error);
             throw Error(error);
         }
+    },
+
+    /**
+                * update profile  
+                * @param {Object} req
+                * @param {Object} res
+                * @param {Function} next
+                */
+
+    async updateProfile(req, res, next) {
+        try {
+            const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
+            return res.status(HttpStatus.OK).json({
+                success: true,
+                message: "Profile Updated..."
+            })
+        } catch (error) {
+            console.log(error);
+            throw Error(error);
+        }
     }
+
+
 
 
 }  
