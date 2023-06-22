@@ -142,7 +142,29 @@ export default {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    /**
+                * update profile  
+                * @param {Object} req
+                * @param {Object} res
+                * @param {Function} next
+                */
+
+    async updateProfile(req, res, next) {
+        try {
+            const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
+            return res.status(HttpStatus.OK).json({
+                success: true,
+                message: "Profile Updated..."
+            })
+        } catch (error) {
+            console.log(error);
+            throw Error(error);
+        }
     }
+
+
 
 
 }  

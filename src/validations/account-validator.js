@@ -48,16 +48,6 @@ const userCreateSchema = Joi.object({
         'string.max': 'FIRST_NAME_MAX_VALIDATION',
       })
       .required(),
-     lastName: Joi.string()
-      .min(3)
-      .max(20)
-      .messages({
-        'any.required': 'FIRST_NAME_REQUIRED',
-        'string.empty': 'FIRST_NAME_REQUIRED',
-        'string.min': 'FIRST_NAME_MIN_VALIDATION',
-        'string.max': 'FIRST_NAME_MAX_VALIDATION',
-      })
-      .required(),
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: false } })
       .min(6)
@@ -84,13 +74,7 @@ const userCreateSchema = Joi.object({
         'any.required': 'PASSWORD_REQUIRED',
       })
       .required(),
-      userRole:Joi.string()
-      .required(),
-      specialization : Joi.string().required().allow('').messages({
-        'any.string' : "SPECILIZATION_REQUIRED",
-        'string.empty' : "SPECILIZATION_REQUIRED"
-      }).empty(),
-      contact : Joi.string().empty().min(10).max(14).required(),
+      //contact : Joi.string().empty().min(10).max(14).required(),
   });
 
 
