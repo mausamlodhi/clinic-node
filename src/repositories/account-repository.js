@@ -77,7 +77,9 @@ export default {
                 const hashPassword = await bcrypt.hash(bodyData.password, salt);
                 bodyData.password = hashPassword;
                 const userData = await user.create(bodyData, { transaction });
+                //console.log(userData)
                 const roleData = await role.findOne({ where: { role: commonConstant.ROLE.USER } });
+                console.log(roleData)
                 if (userData) {
                     const data = {
                         userId: userData.id,

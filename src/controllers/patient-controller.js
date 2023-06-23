@@ -7,10 +7,17 @@ export default {
     async getPatients(req, res, next) {
         try {
             const result = await patientRepository.getPatientList(req);
-            res.status(HttpStatus.OK).json({
-                success: true,
-                data: result,
-            });
+            if (result) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: null,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
         } catch (error) {
             console.log(error)
         }
@@ -22,10 +29,17 @@ export default {
     async becomePatient(req, res, next){
         try {
             const updatedUser = await patientRepository.becomePatient(req.body,req.body.email);
-            return res.status(HttpStatus.OK).json({
-                success: true,
-                message: "You became patient"
-            })
+            if (updatedUser) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: null,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
         } catch (error) {
             console.log(error);
             throw Error(error);

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       roleId: {
         type: DataTypes.INTEGER,
       },
-    },
+    }
   );
 
   userRole.associate = (models) => {

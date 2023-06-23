@@ -1,5 +1,8 @@
 import model from "../models";
+import constant from '../constants';
+
 const { user, patient, patientclinic } = model;
+const { commonConstant } = constant;
 
 export default {
   async getPatientList(req) {
@@ -8,6 +11,7 @@ export default {
   async becomePatient(req, email) {
     const transaction = await model.sequelize.transaction();
     try {
+      console.log(email);
       const userResult = await user.findOne({ where: { email } });
       console.log(userResult);
       if (userResult) {
@@ -20,9 +24,18 @@ export default {
         }, { transaction });
         //console.log(result);
         await patientclinic.create({
-            userId: userResult.dataValues.id,
-            clinicId: req.clinicId
+          userId: userResult.dataValues.id,
+          clinicId: req.clinicId
         }, { transaction })
+
+        const roleData = await role.findOne({
+          where: { role: commonConstant.ROLE.PATIENT }
+        });
+
+        await userRole.update({ roleId: roleData.id },
+          {
+            where: { userId: userResult.dataValues.id }
+          }, { transaction })
 
         await transaction.commit();
         return true;

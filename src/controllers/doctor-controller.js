@@ -7,10 +7,17 @@ export default {
     async getDoctors(req, res, next) {
         try {
             const result = await doctorRepository.getDoctorList(req);
-            res.status(HttpStatus.OK).json({
-                success: true,
-                data: result,
-            });
+            if (result) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: null,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
         } catch (error) {
             console.log(error)
         }
@@ -18,10 +25,17 @@ export default {
     async updateDoctorProfile(req, res, next) {
         try {
             const updatedUser = await doctorRepository.updateProfile(req.body);
-            return res.status(HttpStatus.OK).json({
-                success: true,
-                message: "Profile Updated..."
-            })
+            if (updatedUser) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: null,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
         } catch (error) {
             console.log(error);
             throw Error(error);
@@ -30,10 +44,17 @@ export default {
     async becomeDoctor(req, res, next) {
         try {
             const updatedUser = await doctorRepository.becomeDoctor(req.body, req.body.email);
-            return res.status(HttpStatus.OK).json({
-                success: true,
-                message: "You became doctor"
-            })
+            if (updatedUser) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: null,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
         } catch (error) {
             console.log(error);
             throw Error(error);

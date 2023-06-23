@@ -12,7 +12,6 @@ const validateRequest = (options) => async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    console.log(error);
         const errors = [];
         if(errors.isJoi){
             error.details.forEach((errorData)=>{

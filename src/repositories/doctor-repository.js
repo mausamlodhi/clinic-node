@@ -1,7 +1,10 @@
 import model from "../models";
 import moment from "moment";
-const { user, doctor, doctorSpecialization } = model;
+const { user, doctor, doctorSpecialization, userRole, role } = model;
 import { Op } from 'sequelize';
+import constant from '../constants';
+
+const { commonConstant } = constant;
 
 export default {
     async getDoctorList(req) {
@@ -25,17 +28,17 @@ export default {
                 const doctorSpecializationData = await doctorSpecialization.findAll(searchCriteria);
                 //console.log(doctorSpecializationData);
                 const result = [];
-                
+
                 if (doctorSpecializationData.length > 0) {
                     await Promise.all(
                         doctorSpecializationData.map(async (item) => {
                             const objectValue = item;
                             const user = { id: item.userId };
-                            let output =await doctor.findAll({
-                                where:{userId:user.id},
+                            let output = await doctor.findAll({
+                                where: { userId: user.id },
                             });
-                            await output.map((data)=>{
-                                item.userId=data
+                            await output.map((data) => {
+                                item.userId = data
                             })
                             result.push(objectValue);
                         }),
@@ -56,7 +59,7 @@ export default {
                 }
                 return output;
             }
-            if(clinicId){
+            if (clinicId) {
 
             }
 
@@ -67,9 +70,7 @@ export default {
     async becomeDoctor(req, email) {
         const transaction = await model.sequelize.transaction();
         try {
-            console.log(email)
             const userResult = await user.findOne({ where: { email } });
-            console.log(userResult)
             if (userResult) {
                 await doctor.create({
                     dateOfBirth: req.dateOfBirth,
@@ -82,6 +83,15 @@ export default {
                     userId: userResult.dataValues.id,
                     specializationId: req.specializationId
                 }, { transaction })
+
+                const roleData = await role.findOne({
+                    where: { role: commonConstant.ROLE.DOCTOR }
+                });
+
+                await userRole.update({ roleId: roleData.id },
+                    {
+                        where: { userId: userResult.dataValues.id }
+                    }, { transaction })
 
                 await transaction.commit();
                 return true;

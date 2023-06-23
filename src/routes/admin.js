@@ -3,8 +3,9 @@ import controllers from '../controllers';
 
 const router = Router();
 
-const { doctorController ,patientController,clinicController} = controllers;
+const { doctorController ,patientController,clinicController,adminController} = controllers;
 
+router.get('/dashboard',adminController.dashboard)
 
 router.get(
   '/getDoctorList',

@@ -1,17 +1,40 @@
 import { Router } from 'express';
 import controllers from '../controllers';
+import validations from '../validations';
+import middlewares from '../middlewares';
 const router = Router();
 
 const { accountController,
     doctorController,
     patientController,
-     } = controllers;
+} = controllers;
+const { updateProfileValidator } = validations;
+const { validateMiddleware } = middlewares;
 
-router.post('/become-doctor', doctorController.becomeDoctor);
-router.post('/become-patient', patientController.becomePatient);
+router.post('/become-doctor',
+    validateMiddleware({
+        schema: updateProfileValidator.updateDoctorProfileSchema
+    }),
+    doctorController.becomeDoctor);
+
+router.post('/become-patient',
+    validateMiddleware({
+        schema: updateProfileValidator.updatePatientProfileSchema
+    }),
+    patientController.becomePatient);
 
 router.post('/update-profile', accountController.updateProfile);
-router.post('/update-profile/doctor', doctorController.updateDoctorProfile);
-router.post('/update-profile/patient', patientController.updatePatientProfile);
+
+router.post('/update-profile/doctor',
+    validateMiddleware({
+        schema: updateProfileValidator.updateDoctorProfileSchema
+    }),
+    doctorController.updateDoctorProfile);
+
+router.post('/update-profile/patient',
+    validateMiddleware({
+        schema: updateProfileValidator.updatePatintProfileSchema
+    }),
+    patientController.updatePatientProfile);
 
 export default router;

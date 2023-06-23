@@ -31,6 +31,6 @@ module.exports = (sequelize, DataTypes) => {
                 return null;
             }
         }
-    });
+    },);
     return media;
 }

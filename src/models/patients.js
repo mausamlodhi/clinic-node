@@ -1,31 +1,44 @@
 module.exports = (sequelize, DataTypes) => {
+
     const patient = sequelize.define(
         'patient',
         {
             dateOfBirth: {
                 type: DataTypes.DATEONLY,
             },
+
             address: {
                 type: DataTypes.STRING,
             },
-            diabitic:{
-               type: DataTypes.STRING,
+
+            diabitic: {
+                type: DataTypes.STRING,
             },
-            insurance:{
+            insurance: {
                 type: DataTypes.STRING,
             },
             userId: {
                 type: DataTypes.INTEGER,
-                references: {
-                  model: 'users', // Name of the referenced table
-                  key: 'id', // Primary key of the referenced table
-                },
-              },
+                unique: true
+            },
         }
+
     );
 
     patient.associate = (models) => {
-        patient.belongsTo(models.users, { foreignKey: 'userId'});
+
+        patient.belongsTo(models.user, { foreignKey: 'userId' });
+
+        patient.hasMany(models.clinicPatient, {
+
+            foreignKey: "patientId",
+
+            onDelete: "cascade"
+
+        })
+
     }
+
     return patient;
+
 }

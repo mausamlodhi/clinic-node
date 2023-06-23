@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
                     this.setDataValue('profileImage', tmpStr);
                 },
             },
-        }
+        },
     );
 
     user.addScope('userRole', (data) => ({

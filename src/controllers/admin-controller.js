@@ -1,12 +1,13 @@
 import repositories from "../repositories";
 import HttpStatus from "http-status";
 
-const { clinicRepository } = repositories;
+const { adminRepository } = repositories;
 
 export default {
-    async getClinics(req, res, next) {
+    async dashboard(req, res, next) {
         try {
-            const result = await clinicRepository.getClinicList(req);
+            //console.log(req.body);
+            const result = await adminRepository.dashboard(req);
             if (result) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -16,10 +17,11 @@ export default {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
                     data: null,
+                    message: "Something went wrong"
                 });
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     },
 }

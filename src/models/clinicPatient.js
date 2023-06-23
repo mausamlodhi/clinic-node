@@ -1,40 +1,38 @@
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize,DataTypes)=>{
 
-    const patientClinic = sequelize.define("patientClinic", {
-
-        patientId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'patients',
-                key: 'id',
-            },
+    const clinicPatient = sequelize.define("clinicPatient",{
+        patientId : {
+            type : DataTypes.INTEGER
         },
-        clinicId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'clinics',
-                key: 'id',
-            },
-        }
-    },{
-        timestamps:false,
-        indexes: [
-            {
-              unique: true,
-              fields: ['patientId', 'clinicId']
-            }
-          ]
-    })
 
-    patientClinic.associate = (models) => {
-        patientClinic.belongsTo(models.patient, {
-            foreignKey: 'patientId',
-            onDelete: 'cascade',
-        });
-        patientClinic.belongsTo(models.clinic, {
-            foreignKey: 'clinicId',
-            onDelete: 'cascade',
-        });
+        clinicId:{
+
+            type: DataTypes.INTEGER
+
+        }
+
+    });
+
+    clinicPatient.associate = (model)=>{
+
+        clinicPatient.belongsTo(model.patient,{
+
+            foreignKey : 'patientId',
+
+            onDelete  :"cascade"
+
+        }),
+
+        clinicPatient.belongsTo(model.clinic,{
+
+            foreignKey : 'clinicId',
+
+            onDelete : "cascade"
+
+        })
+
     }
-    return patientClinic;
+
+    return clinicPatient;
+
 }

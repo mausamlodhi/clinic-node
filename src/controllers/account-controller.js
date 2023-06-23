@@ -70,7 +70,6 @@ export default {
     async forgotPassword(req, res, next) {
         try {
             const result = await accountRepository.forgotPassword(req);
-            console.log(result)
             if (result) {
                 res.status(HttpStatus.OK).json({
                     success: true,

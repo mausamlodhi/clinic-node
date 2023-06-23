@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.STRING(50),
       },
-    },
+    }
+    
   );
   return role;
 };
