@@ -3,36 +3,24 @@ import controllers from '../controllers';
 import validations from '../validations';
 import middlewares from '../middlewares';
 const router = Router();
-
 const { accountController } = controllers;
 const { accountValidator } = validations;
 const {validateMiddleware} = middlewares;
   
-router.post("/doctor/signup",
+router.post("/signup",
 validateMiddleware({ schema: accountValidator.userCreateSchema }),
 accountController.signup);
 
-router.post('/patient/signup',
-validateMiddleware({ schema: accountValidator.userCreateSchema }),
- accountController.signup); 
-
-router.post("/doctor/login", 
+router.post("/login", 
 validateMiddleware({ schema: accountValidator.loginSchema })
 ,accountController.login);
-
-router.post(
-    '/patient/login',
-    validateMiddleware({ schema: accountValidator.loginSchema }),
-    accountController.login,
-  );
-
 router.post(
     '/admin/login',
     validateMiddleware({ schema: accountValidator.loginSchema }),
     accountController.adminLogin,
   );
 
-router.post('/doctor/forgot-password', accountController.doctorForgotPassword);
+router.post('/account/forgot-password', accountController.forgotPassword);
 
-router.post('/doctor/reset-password', accountController.resetDoctorPassword);
+//router.post('/account/reset-password/:id', accountController.resetPassword);
 export default router;

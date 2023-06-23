@@ -1,7 +1,9 @@
 const ROLE = {
     ADMIN: 'admin',
     PATIENT:"patient",
-    DOCTOR :"doctor"
+    DOCTOR :"doctor",
+    CLINIC :"clinic",
+    USER: "user"
   };
   
   const STATUS = {
