@@ -8,7 +8,7 @@ module.exports = (sequelize,DataTypes)=>{
         }
     })  
     doctorClinic.associate = (model)=>{
-        doctorClinic.belongsTo(model.user,{
+        doctorClinic.belongsTo(model.doctor,{
             foreignKey : 'doctorId',
             onDelete : 'cascade'
         });

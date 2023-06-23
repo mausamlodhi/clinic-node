@@ -24,11 +24,11 @@ module.exports = (sequelize,DataTypes)=>{
         }
     });
     clinic.associate = (model)=>{
-        clinic.hasMany(model.user,{
+        clinic.hasMany(model.doctor,{
             foriegnKey : "doctorId",
             onDelete : "cascade"
         });
-        clinic.hasMany(model.user,{
+        clinic.hasMany(model.patient,{
             foreignKey : "id",
             onDElete : "cascade"
         })

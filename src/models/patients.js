@@ -16,16 +16,15 @@ module.exports = (sequelize, DataTypes) => {
             },
             userId: {
                 type: DataTypes.INTEGER,
-                references: {
-                  model: 'users', // Name of the referenced table
-                  key: 'id', // Primary key of the referenced table
-                },
               },
         }
     );
-
-    // patient.associate = (models) => {
-    //     patient.belongsTo(models.users, { foreignKey: 'userId'});
-    // }
+    patient.associate = (models) => {
+        patient.belongsTo(models.user, { foreignKey: 'userId'});
+        patient.hasMany(models.clinicPatient,{
+            foreignKey : "patientId",
+            onDelete : "cascade"
+        })
+    }
     return patient;
 }

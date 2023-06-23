@@ -4,7 +4,7 @@ export default {
     async createClinic(req){
         try{
             const {name,address,contact,image} = req.body;
-            const result = await user.create({name,address,contact,image});
+            const result = await clinic.create({name,address,contact,image});
             return result;
         }catch(error){
             console.log(error);

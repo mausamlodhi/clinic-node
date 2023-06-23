@@ -26,7 +26,7 @@ export default {
     async getAllClinic(req,res,next){
         try{
             const list = await clinicRepository.getAllClinicList();
-            list.len
+            list?  res.status(httpStatus.OK).json({message : "Clinic list is fetched ...",data : list}):res.status(httpStatus.BAD_REQUEST).json({message : "Some thing went wrong",data : null});
         }catch(error){
             console.log(error);
             next(error);
