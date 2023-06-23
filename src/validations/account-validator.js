@@ -84,7 +84,8 @@ const userCreateSchema = Joi.object({
         'any.required': 'PASSWORD_REQUIRED',
       })
       .required(),
-      contact : Joi.string().empty().min(10).max(14).required(),
+      phoneNumber : Joi.string().empty().min(10).max(14).required(),
+      address : Joi.string().optional(),
   });
 
 

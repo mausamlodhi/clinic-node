@@ -4,6 +4,9 @@ import media from './media-routes.js';
 import user from "./user";
 import admin from './admin';
 import clinics from "./clinic"
+import clinicDoctor from "./doctorClinic-routes";
+import userrole from "./userRoles";
+
 const router = Router();
 const register = (app) => {
     app.use(router);
@@ -12,7 +15,10 @@ const register = (app) => {
         media,
         user,
         admin,
-        clinics
+        clinics,
+        clinicDoctor,
+        userrole,
+
     ])
 }
 
