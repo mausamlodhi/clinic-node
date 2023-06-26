@@ -45,6 +45,7 @@ export default class Bootstrap{
         };
         const swaggerFunction = swaggerJSDoc(options);
         console.log("Swagger : "+swaggerFunction);
+        app.use(cors());
         app.use(compression());
         app.use(methodOverride());
         app.use(bodyParser.urlencoded({extended:true}));

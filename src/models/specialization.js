@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.STRING(50),
         },
       },
+      {timestamps:false}
     );
     return specialization;
   };

@@ -5,22 +5,25 @@ const router = Router();
 
 const { doctorController ,patientController,clinicController,adminController} = controllers;
 
-router.get('/dashboard',adminController.dashboard)
+router.get('/admin/dashboard',adminController.dashboard)
 
 router.get(
-  '/getDoctorList',
+  '/admin/getDoctorList',
   doctorController.getDoctors,
 );
 
 router.get(
-    '/getPatientList',
+    '/admin/getPatientList',
   patientController.getPatients,
 );
 
 router.get
 (
-    '/getClinicList',
-    clinicController.getClinics,
+    '/admin/getList',
+    clinicController.getList,
 )
+
+router.get( '/admin/getClinicList',
+clinicController.getClinics,)
 
 export default router;

@@ -21,23 +21,21 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 unique: true
             },
+            clinicId:{
+                type: DataTypes.INTEGER,
+            }
         }
-
+        ,
+        {timestamps:false}
     );
 
     patient.associate = (models) => {
-
         patient.belongsTo(models.user, { foreignKey: 'userId' });
-
-        patient.hasMany(models.clinicPatient, {
-
-            foreignKey: "patientId",
-
-            onDelete: "cascade"
-
-        })
-
-    }
+        
+        patient.belongsTo(models.clinic, {
+          foreignKey: 'clinicId',
+        });
+      };
 
     return patient;
 

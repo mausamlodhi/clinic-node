@@ -4,19 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
       },
       specializationId: {
         type: DataTypes.INTEGER,
-        references: {
-          model: 'specializations',
-          key: 'id',
-        },
       },
     },
+    {timestamps:false}
   );
 
   doctorSpecialization.associate = (models) => {
@@ -28,8 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'specializationId',
       onDelete: 'cascade',
     });
-    user.belongsToMany(models.specialization, { through: doctorSpecialization, foreignKey: 'userId' });
-    specialization.belongsToMany(user, { through: doctorSpecialization, foreignKey: 'specializationId' });
+   
 
   };
   return doctorSpecialization;

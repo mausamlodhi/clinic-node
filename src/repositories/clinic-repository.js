@@ -1,10 +1,75 @@
 import model from "../models";
 
-const { clinic, doctor, doctorClinic, patientClinic, patient, user } = model;
+const { clinic, doctor, doctorClinic, patient, user } = model;
 import { Op } from 'sequelize';
 
 export default {
-  // async getClinicList(req) {
+
+  async getList(req) {
+    try {
+        let result = await clinic.findAll();
+        return result;
+      }
+    catch (error) {
+      console.log(error)
+    }
+  },
+
+
+  async getClinicList(req) {
+    try {
+      const { query: { clinicId } } = req;
+      let where = {};
+      if (clinicId) {
+        where.clinicId = { [Op.like]: `%${clinicId[1]}%` };
+      }
+      
+      let searchCriteriaDoctor = {
+        where,
+        include: [{ model: doctor,
+          include: [user],
+           required: true }]
+      };
+      let searchCriteriaPatient = {
+        where,
+        include: [{ model: user }]
+      };
+
+      const result = { doctorList: [], patientList: [] };
+      if (clinicId) {
+        const doctorClinicData = await doctorClinic.findAll(searchCriteriaDoctor);
+        const patientClinicData = await patient.findAll(searchCriteriaPatient);
+
+        if (doctorClinicData.length > 0) {
+          await Promise.all(
+            doctorClinicData.map(async (item) => {
+              result.doctorList.push(item.dataValues);
+            }),
+          );
+        }
+
+        if (patientClinicData.length > 0) {
+          await Promise.all(
+            patientClinicData.map(async (item) => {
+              result.patientList.push(item.dataValues);
+            }),
+          );
+        }
+
+      }
+      return result;
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
+
+
+
+
+
+
+// async getClinicList(req) {
   //   try {
   //     const { query: { clinicId, doctorId } } = req;
   //     let where = {};
@@ -29,8 +94,8 @@ export default {
 
   //     if (clinicId) {
   //       const doctorClinicData = await doctorClinic.findAll(searchCriteria);
-  //      // return doctorClinicData
-  //       const result = {doctorList: [],patientList: []};
+  //       // return doctorClinicData
+  //       const result = { doctorList: [], patientList: [] };
   //       if (doctorClinicData.length > 0) {
   //         await Promise.all(
   //           doctorClinicData.map(async (item) => {
@@ -40,7 +105,7 @@ export default {
   //               where: { id: condition.id },
   //             });
   //             let userData = await user.findOne({
-  //               where:{id:output.userId}
+  //               where: { id: output.userId }
   //             })
   //             item.doctorId = output;
   //             output.userId = userData
@@ -48,27 +113,27 @@ export default {
   //           }),
   //         );
   //       }
-  //       const patientClinicData = await patientClinic.findAll(searchCriteria);
-  //       const result1 = [];
-  //       if (patientClinicData.length > 0) {
-  //         await Promise.all(
-  //           patientClinicData.map(async (item) => {
-  //             const objectValue = item;
-  //             const condition = { id: item. patientId };
-  //             let output = await patient.findOne({
-  //               where: { id: condition.id },
-  //             });
-  //             console.log(output.userId)
-  //             let userData = await user.findOne({
-  //               where:{id:output.userId}
-  //             })
-  //             item.patientId = output;
-  //             output.userId = userData
-  //             result.patientList.push(objectValue);
-  //           }),
-  //         );
-  //         return result;
-  //       }
+  //       // const patientClinicData = await patientClinic.findAll(searchCriteria);
+  //       // const result1 = [];
+  //       // if (patientClinicData.length > 0) {
+  //       //   await Promise.all(
+  //       //     patientClinicData.map(async (item) => {
+  //       //       const objectValue = item;
+  //       //       const condition = { id: item.patientId };
+  //       //       let output = await patient.findOne({
+  //       //         where: { id: condition.id },
+  //       //       });
+  //       //       console.log(output.userId)
+  //       //       let userData = await user.findOne({
+  //       //         where: { id: output.userId }
+  //       //       })
+  //       //       item.patientId = output;
+  //       //       output.userId = userData
+  //       //       result.patientList.push(objectValue);
+  //       //     }),
+  //       //   );
+  //       //   return result;
+  //       // }
 
   //     }
 
@@ -103,40 +168,3 @@ export default {
   //   }
   // },
 
-
-  // async getClinicList(req) {
-  //   try {
-  //     const { query: { clinicId, doctorId } } = req;
-  //     let where = {};
-
-  //     if (clinicId) {
-  //       where.clinicId = { [Op.like]: `%${clinicId}%` };
-  //     }
-
-  //     let searchCriteria = {
-  //       where,
-  //       include: [
-  //         {
-  //           model: doctor,
-  //           required: true
-  //         }
-  //       ]
-  //     };
-  //     if (clinicId) {
-  //       const doctorClinicData = await doctorClinic.findAll(searchCriteria);
-  //       // return doctorClinicData
-  //       const result = { doctorList: []};
-  //       if (doctorClinicData.length > 0) {
-  //         await Promise.all(
-  //           doctorClinicData.map(async (item) => {
-  //             const objectValue = item;
-  //             result.doctorList.push(objectValue);
-  //           }),
-  //         );
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-}

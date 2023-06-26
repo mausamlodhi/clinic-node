@@ -8,8 +8,8 @@ module.exports = {
         {
           email: "mausam@gmail.com",
           password: await HashPassword.createHashPassword("Mausam@123"),
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          // createdAt: new Date(),
+          // updatedAt: new Date(),
         },
       ],
       {}

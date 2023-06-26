@@ -1,74 +1,42 @@
-module.exports = (sequelize,DataTypes)=>{
+module.exports = (sequelize, DataTypes) => {
 
-    const clinic = sequelize.define("clinic",{
-
-        name:{
-
-            type : DataTypes.STRING(255),
-
-            required : true,
-
-            trim : true,
-
-            unique : true,
-
+    const clinic = sequelize.define("clinic", {
+        name: {
+            type: DataTypes.STRING(255),
+            required: true,
+            trim: true,
+            unique: true,
         },
-
-        address : {
-
-            type : DataTypes.STRING(255),
-
-            required : true,
-
-            trim : true,
-
+        address: {
+            type: DataTypes.STRING(255),
+            required: true,
+            trim: true,
         },
-
-        contact : {
-
-            type : DataTypes.STRING(13),
-
-            required:true,
-
-            trim : true,
-
-            unique : true
-
+        contact: {
+            type: DataTypes.STRING(13),
+            required: true,
+            trim: true,
+            unique: true
         },
-
-        image : {
-
-            type : DataTypes.STRING(255),
-
-            trim : true,
-
-            unique : true
-
+        image: {
+            type: DataTypes.STRING(255),
+            trim: true,
+            unique: true
         }
 
-    });
+    },
+        { timestamps: false });
 
-    clinic.associate = (model)=>{
-
-        clinic.hasMany(model.doctor,{
-
-            foriegnKey : "doctorId",
-
-            onDelete : "cascade"
-
+    clinic.associate = (models) => {
+        clinic.hasMany(models.patient, {
+            foreignKey: 'clinicId',
         });
 
-        clinic.hasMany(model.patient,{
-
-            foreignKey : "id",
-
-            onDelete : "cascade"
-
-        })
-
-       
-
-    }
+        // clinic.hasMany(models.doctor, {
+        //     through: models.doctorclinic,
+        //     foreignKey: 'clinicId',
+        // });
+    };
 
     return clinic;
 

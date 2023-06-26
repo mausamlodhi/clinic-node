@@ -11,7 +11,7 @@ export default {
             if (result) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: null,
+                    data: result,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({

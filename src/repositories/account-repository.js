@@ -18,6 +18,7 @@ export default {
         try {
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
+            console.log(userResult)
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
 

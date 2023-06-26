@@ -4,11 +4,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
+        unique:true
       },
       roleId: {
         type: DataTypes.INTEGER,
       },
-    }
+    },
+    {timestamps:false}
   );
 
   userRole.associate = (models) => {

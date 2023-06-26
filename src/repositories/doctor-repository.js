@@ -9,59 +9,11 @@ const { commonConstant } = constant;
 export default {
     async getDoctorList(req) {
         try {
-            const { query: { experience, specialization, clinicId } } = req;
-            let where = {};
-            if (experience) {
-                where.experience = { [Op.like]: `%${experience}%` };
-            }
-            if (specialization) {
-                where.specializationId = { [Op.like]: `%${specialization}%` };
-            }
-            if (clinicId) {
-                where.clinicId = { [Op.like]: `%${clinicId}%` };
-            }
-
-            let searchCriteria = {
-                where,
-            };
-            if (specialization) {
-                const doctorSpecializationData = await doctorSpecialization.findAll(searchCriteria);
-                //console.log(doctorSpecializationData);
-                const result = [];
-
-                if (doctorSpecializationData.length > 0) {
-                    await Promise.all(
-                        doctorSpecializationData.map(async (item) => {
-                            const objectValue = item;
-                            const user = { id: item.userId };
-                            let output = await doctor.findAll({
-                                where: { userId: user.id },
-                            });
-                            await output.map((data) => {
-                                item.userId = data
-                            })
-                            result.push(objectValue);
-                        }),
-                    );
-                    return result;
-                }
-            }
-            if (experience) {
-                const doctorResult = await doctor.findAll(searchCriteria);
-                const output = [];
-                if (doctorResult.length > 0) {
-                    await Promise.all(
-                        doctorResult.map(async (item) => {
-                            const objectValue = item;
-                            output.push(objectValue);
-                        }),
-                    );
-                }
-                return output;
-            }
-            if (clinicId) {
-
-            }
+            let searchCriteriaDoctor = {
+                include: [{ model: user }]
+              };
+           let result = doctor.findAll(searchCriteriaDoctor);
+           return result
 
         } catch (error) {
             console.log(error)
@@ -178,3 +130,57 @@ export default {
     //     }
     // }
 }
+
+// const { query: { experience, specialization, clinicId } } = req;
+// let where = {};
+// if (experience) {
+//     where.experience = { [Op.like]: `%${experience}%` };
+// }
+// if (specialization) {
+//     where.specializationId = { [Op.like]: `%${specialization}%` };
+// }
+// if (clinicId) {
+//     where.clinicId = { [Op.like]: `%${clinicId}%` };
+// }
+
+// let searchCriteria = {
+//     where,
+// };
+// if (specialization) {
+//     const doctorSpecializationData = await doctorSpecialization.findAll(searchCriteria);
+//     //console.log(doctorSpecializationData);
+//     const result = [];
+
+//     if (doctorSpecializationData.length > 0) {
+//         await Promise.all(
+//             doctorSpecializationData.map(async (item) => {
+//                 const objectValue = item;
+//                 const user = { id: item.userId };
+//                 let output = await doctor.findAll({
+//                     where: { userId: user.id },
+//                 });
+//                 await output.map((data) => {
+//                     item.userId = data
+//                 })
+//                 result.push(objectValue);
+//             }),
+//         );
+//         return result;
+//     }
+// }
+// if (experience) {
+//     const doctorResult = await doctor.findAll(searchCriteria);
+//     const output = [];
+//     if (doctorResult.length > 0) {
+//         await Promise.all(
+//             doctorResult.map(async (item) => {
+//                 const objectValue = item;
+//                 output.push(objectValue);
+//             }),
+//         );
+//     }
+//     return output;
+// }
+// if (clinicId) {
+
+// }
