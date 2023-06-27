@@ -5,21 +5,29 @@ const { user, patient } = model;
 const { commonConstant } = constant;
 
 export default {
+
+   /**
+   *get patient list
+   * @param {Object} req
+   * @returns
+   */
   async getPatientList(req) {
     let searchCriteriaPatient = {
       include: [{ model: user }]
     };
     let result = await patient.findAll(searchCriteriaPatient);
-   
     return result;
   },
-  
+
+   /**
+   * update profile become patient
+   * @param {Object} req
+   * @returns
+   */
   async becomePatient(req, email) {
     const transaction = await model.sequelize.transaction();
     try {
-      console.log(email);
       const userResult = await user.findOne({ where: { email } });
-      console.log(userResult);
       if (userResult) {
         let result = await patient.create({
           dateOfBirth: req.dateOfBirth,
@@ -50,8 +58,8 @@ export default {
         return false;
       }
     } catch (error) {
-      console.log(error);
       await transaction.rollback();
+      throw Error(error);
     }
   },
 }

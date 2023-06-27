@@ -4,31 +4,41 @@ const { clinic, doctor, doctorClinic, patient, user } = model;
 import { Op } from 'sequelize';
 
 export default {
-
+/**
+   * get list of all clinics
+   * @param {Object} req
+   * @returns
+   */
   async getList(req) {
     try {
-        let result = await clinic.findAll();
-        return result;
-      }
+      let result = await clinic.findAll();
+      return result;
+    }
     catch (error) {
-      console.log(error)
+      throw Error(error);
     }
   },
 
-
+  /**
+   * doctor and patient of particular clinic
+   * @param {Object} req
+   * @returns
+   */
   async getClinicList(req) {
     try {
       const { query: { clinicId } } = req;
       let where = {};
       if (clinicId) {
-        where.clinicId = { [Op.like]: `%${clinicId[1]}%` };
+        where.clinicId = { [Op.like]: `%${clinicId}%` };
       }
-      
+
       let searchCriteriaDoctor = {
         where,
-        include: [{ model: doctor,
+        include: [{
+          model: doctor,
           include: [user],
-           required: true }]
+          required: true
+        }]
       };
       let searchCriteriaPatient = {
         where,
@@ -59,16 +69,65 @@ export default {
       }
       return result;
     } catch (error) {
-      console.log(error)
+      throw Error(error);
+    }
+  },
+
+/**
+   * create a clinic
+   * @param {Object} req
+   * @returns
+   */
+  async createClinic(req) {
+    try {
+      const { name, address, contact, image } = req.body;
+      const result = await clinic.create({ name, address, contact, image });
+      return result;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+  async checkClinicAvialibility(req) {
+    try {
+      const { name } = req?.body;
+      const result = await clinic.findOne({ name });
+      return result?.id;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
+   * update clinic profile
+   * @param {Object} req
+   * @returns
+   */
+  async updateClinic(req) {
+    try {
+      const clinicId = await this.checkClinicAvialibility(req);
+      const { name, address, contact, image } = req?.body;
+      return await clinic.update({ name, address, contact, image }, { where: { id: clinicId } });
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
+   * delete any clinic
+   * @param {Object} req
+   * @returns
+   */
+  async deleteClinic(req) {
+    try {
+      const { id } = req?.body;
+      const isDelete = await clinic.destroy({ where: { id } });
+      console.log("Delete clinic : " + isDelete);
+      return isDelete;
+    } catch (error) {
+      throw Error(error);
     }
   }
 }
-
-
-
-
-
-
 // async getClinicList(req) {
   //   try {
   //     const { query: { clinicId, doctorId } } = req;

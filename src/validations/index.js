@@ -1,9 +1,11 @@
 import accountValidator from './account-validator';
-import mediaValidations from './media-validations.js';
+import mediaValidator from './media-validator.js';
+import clinicValidator from "./clinic-validator"
 import updateProfileValidator from './update-profile-validator';
 
 export default {
     accountValidator,
-    mediaValidations,
-    updateProfileValidator
+    updateProfileValidator,
+    mediaValidator,
+    clinicValidator
 }

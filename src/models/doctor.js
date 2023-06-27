@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
     const doctor = sequelize.define(
-
         'doctor',
         {
             dateOfBirth: {
@@ -11,18 +10,21 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             experience: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
             },
             userId: {
                 type: DataTypes.INTEGER,
                 unique: true
             },
         },
-        {timestamps:false}
+        {
+            timestamps: false,
+            underscored: true
+        }
 
     );
     doctor.associate = (models) => {
-        doctor.belongsTo(models.user, { foreignKey: 'userId' });
+        doctor.belongsTo(models.user, { foreignKey: 'user_id' });
 
         // doctor.hasMany(models.clinic, {
         //     through:models.d,

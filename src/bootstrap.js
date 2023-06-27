@@ -8,6 +8,8 @@ import express from "express";
 import path, { dirname } from "path";
 import routes from './routes/index.js';
 import swaggerUi from "swagger-ui-express";
+import cors from 'cors';
+
 export default class Bootstrap{
     constructor(app){
         this.app = app;
@@ -40,7 +42,7 @@ export default class Bootstrap{
             apis : ['./api-documents/*.yml']
         };
         const swaggerFunction = swaggerJSDoc(options);
-        console.log("Swagger : "+swaggerFunction);
+        app.use(cors());
         app.use(compression());
         app.use(methodOverride());
         app.use(bodyParser.urlencoded({extended:true}));

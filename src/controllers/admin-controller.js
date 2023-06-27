@@ -4,6 +4,12 @@ import HttpStatus from "http-status";
 const { adminRepository } = repositories;
 
 export default {
+     /**
+         * get all dashboard details
+         * @param {Object} req
+         * @param {Object} res
+         * @param {Function} next
+         */
     async dashboard(req, res, next) {
         try {
             //console.log(req.body);
@@ -21,7 +27,7 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
+            next(error); 
         }
     },
 }

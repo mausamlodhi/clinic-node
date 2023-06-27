@@ -1,7 +1,13 @@
 import models from '../models';
 
-const { patient, clinic, doctor,user } = models;
+const { patient, clinic, doctor } = models;
 export default {
+
+    /**
+   *doctor clinic patient detail 
+   * @param {Object} req
+   * @returns
+   */
     async dashboard() {
         try {
             const data = {};
@@ -17,14 +23,9 @@ export default {
             // TOTALPATIENTS
             const patientData = await patient.findAll();
             data.totalPatient = (patientData.length > 0) ? patientData.length : 0;
-
-            const userData = await user.findAll();
-            data.totalUser = (userData.length > 0) ? userData.length : 0;
-
-            console.log(data)
+            
             return data;
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }

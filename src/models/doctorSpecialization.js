@@ -2,23 +2,31 @@ module.exports = (sequelize, DataTypes) => {
   const doctorSpecialization = sequelize.define(
     'doctorSpecialization',
     {
-      userId: {
+      doctorId: {
         type: DataTypes.INTEGER,
       },
       specializationId: {
         type: DataTypes.INTEGER,
       },
     },
-    {timestamps:false}
+    {timestamps:false,
+      underscored: true,
+      indexes: [
+        // Create a composite index to enforce uniqueness of the combination (doctorId, clinicId)
+        {
+          unique: true,
+          fields: ['doctor_id', 'specialization_id']
+        }
+      ],}
   );
 
   doctorSpecialization.associate = (models) => {
-    doctorSpecialization.belongsTo(models.user, {
-      foreignKey: 'userId',
+    doctorSpecialization.belongsTo(models.doctor, {
+      foreignKey: 'doctor_id',
       onDelete: 'cascade',
     });
     doctorSpecialization.belongsTo(models.specialization, {
-      foreignKey: 'specializationId',
+      foreignKey: 'specialization_id',
       onDelete: 'cascade',
     });
    

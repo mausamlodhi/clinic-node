@@ -11,5 +11,5 @@ export default{
     doctorController,
     patientController,
     clinicController,
-    adminController
+    adminController,
 };
