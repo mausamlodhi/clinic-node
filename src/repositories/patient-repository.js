@@ -1,15 +1,33 @@
 import model from "../models";
-const { user, patient, patientclinic } = model;
+import constant from '../constants';
+
+const { user, patient } = model;
+const { commonConstant } = constant;
 
 export default {
-  async getPatientList(req) {
 
+   /**
+   *get patient list
+   * @param {Object} req
+   * @returns
+   */
+  async getPatientList(req) {
+    let searchCriteriaPatient = {
+      include: [{ model: user }]
+    };
+    let result = await patient.findAll(searchCriteriaPatient);
+    return result;
   },
+
+   /**
+   * update profile become patient
+   * @param {Object} req
+   * @returns
+   */
   async becomePatient(req, email) {
     const transaction = await model.sequelize.transaction();
     try {
       const userResult = await user.findOne({ where: { email } });
-      console.log(userResult);
       if (userResult) {
         let result = await patient.create({
           dateOfBirth: req.dateOfBirth,
@@ -19,10 +37,19 @@ export default {
           userId: userResult.dataValues.id
         }, { transaction });
         //console.log(result);
-        await patientclinic.create({
-            userId: userResult.dataValues.id,
-            clinicId: req.clinicId
-        }, { transaction })
+        // await patientclinic.create({
+        //   userId: userResult.dataValues.id,
+        //   clinicId: req.clinicId
+        // }, { transaction })
+
+        const roleData = await role.findOne({
+          where: { role: commonConstant.ROLE.PATIENT }
+        });
+
+        await userRole.update({ roleId: roleData.id },
+          {
+            where: { userId: userResult.dataValues.id }
+          }, { transaction })
 
         await transaction.commit();
         return true;
@@ -31,8 +58,8 @@ export default {
         return false;
       }
     } catch (error) {
-      console.log(error);
       await transaction.rollback();
+      throw Error(error);
     }
   },
 }

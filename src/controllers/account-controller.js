@@ -6,7 +6,7 @@ const { accountRepository } = repositories;
 
 export default {
     /**
-         * sign up doctor
+         * sign up user
          * @param {Object} req
          * @param {Object} res
          * @param {Function} next
@@ -28,30 +28,35 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     },
 
-    async logout(req,res,next){
-        try{
-            if(await accountRepository.signout(req,res,next))
+     /**
+         * sign out user
+         * @param {Object} req
+         * @param {Object} res
+         * @param {Function} next
+         */
+    async logout(req, res, next) {
+        try {
+            if (await accountRepository.signout(req, res, next))
                 return res.status(HttpStatus.OK).json({
-                    success : true,
-                    message : null
+                    success: true,
+                    message: null
                 });
             else
                 return res.status(HttpStatus.BAD_REQUEST).json({
-                    success : false,
-                    message : "User doesn't exists"
+                    success: false,
+                    message: "User doesn't exists"
                 })
-        }catch(error){
-            console.log(error);
-            throw Error(error);
+        } catch (error) {
+            next(error);
         }
     },
 
     /**
-     * login doctor
+     * login user
      * @param {Object} req
      * @param {Object} res
      * @param {Function} next
@@ -76,9 +81,10 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     },
+
     /**
              * forget password  
              * @param {Object} req
@@ -88,7 +94,6 @@ export default {
     async forgotPassword(req, res, next) {
         try {
             const result = await accountRepository.forgotPassword(req);
-            console.log(result)
             if (result) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -102,14 +107,19 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     },
+
+     /**
+         * admin login
+         * @param {Object} req
+         * @param {Object} res
+         * @param {Function} next
+         */
     async adminLogin(req, res, next) {
         try {
-            console.log("Login called....")
             const user = await accountRepository.adminLogin(req);
-            console.log(user);
             if (user.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -127,12 +137,19 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     },
-    async resetDoctorPassword(req, res) {
+
+     /**
+             * reset password
+             * @param {Object} req
+             * @param {Object} res
+             * @param {Function} next
+             */
+    async resetPassword(req, res) {
         try {
-            const user = await accountRepository.resetDoctorPassword(req);
+            const user = await accountRepository.resetPassword(req);
             if (user) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -146,31 +163,17 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
-            throw Error(error);
-        }
-    },
-    async updateProfile(req,res,next){
-        try{
-            console.log("Email : "+req.body.user);
-            const updatedUser = await accountRepository.updateProfile(req.body,req.body.user);
-            return res.status(HttpStatus.OK).json({
-                success : true,
-                message : "Profile Updated..."
-            })
-        }catch(error){
-            console.log(error);
-            throw Error(error);
-        }
-    },
 
+            next(error);
+        }
+    },
+    
     /**
-                * update profile  
+                * update profile  user
                 * @param {Object} req
                 * @param {Object} res
                 * @param {Function} next
                 */
-
     async updateProfile(req, res, next) {
         try {
             const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
@@ -179,12 +182,7 @@ export default {
                 message: "Profile Updated..."
             })
         } catch (error) {
-            console.log(error);
-            throw Error(error);
+            next(error);
         }
     }
-
-
-
-
 }  
