@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       {timestamps:false}
     );
+    specialization.associate = (models)=>{
+      specialization.hasMany(models.doctorSpecialization,{
+        foreignKey : "specializationId"
+      });
+    }
     return specialization;
   };
   

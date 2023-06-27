@@ -7,13 +7,10 @@ const {mediaValidations} = validations;
 const {validateMiddleware} = middlewares;
 const {mediaControllers} = controllers;
 router.post('/media/upload/:mediaFor/:mediaType',(request,response,next)=>{
-    console.log("Body : "+request.body);
     Object.assign(request.params,{apiName : 'media'});
         next();
     },(request,response,next)=>{
         const {params} = request;
-        console.log("Body : "+request.body.image);
-        console.log("Param"+params.mediaFor);
         Object.assign(request.body,params);
         next();
     },
