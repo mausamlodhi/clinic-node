@@ -19,9 +19,10 @@ export default {
   async getClinicList(req) {
     try {
       const { query: { clinicId } } = req;
+      console.log(clinicId)
       let where = {};
       if (clinicId) {
-        where.clinicId = { [Op.like]: `%${clinicId[1]}%` };
+        where.clinicId = { [Op.like]: `%${clinicId}%` };
       }
       
       let searchCriteriaDoctor = {

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             experience: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
             },
             userId: {
                 type: DataTypes.INTEGER,

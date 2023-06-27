@@ -22,6 +22,46 @@ export default {
             console.log(error)
         }
     },
+
+    async getDoctorListCondition(req, res, next) {
+        try {
+            const result = await doctorRepository.getDoctorListCondition(req);
+            if (result) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: result,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
+    async specializationList (req, res, next) {
+        try {
+            const result = await doctorRepository.specializationList(req);
+            if (result) {
+                res.status(HttpStatus.OK).json({
+                    success: true,
+                    data: result,
+                });
+            } else {
+                res.status(HttpStatus.BAD_REQUEST).json({
+                    success: false,
+                    data: null,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            throw Error(error);
+        }
+    },
+
     async updateDoctorProfile(req, res, next) {
         try {
             const updatedUser = await doctorRepository.updateProfile(req.body);

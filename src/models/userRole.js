@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
     },
-    {timestamps:false}
+    {timestamps:false,
+      indexes: [
+        // Create a composite index to enforce uniqueness of the combination (doctorId, clinicId)
+        {
+          unique: true,
+          fields: ['userId', 'roleId']
+        }
+      ],}
   );
 
   userRole.associate = (models) => {

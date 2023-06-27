@@ -11,6 +11,9 @@ router.get(
   '/admin/getDoctorList',
   doctorController.getDoctors,
 );
+router.get('/admin/specializationList',doctorController.specializationList);
+
+router.get('/admin/getDoctorListCondition',doctorController.getDoctorListCondition);
 
 router.get(
     '/admin/getPatientList',

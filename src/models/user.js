@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
             },
             phoneNumber: {
                 type: DataTypes.STRING(256),
-                unique: {
-                    args: 'phoneNumber',
-                    msg: 'The phoneNumber is already taken!',
-                },
+                // unique: {
+                //     args: 'phoneNumber',
+                //     msg: 'The phoneNumber is already taken!',
+                // },
             },
             passwordResetToken: {
                 type: DataTypes.STRING(191),
