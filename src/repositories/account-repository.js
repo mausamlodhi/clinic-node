@@ -21,7 +21,6 @@ export default {
             console.log(userResult)
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
-
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
@@ -36,11 +35,27 @@ export default {
             console.log(error)
         }
     },
-     /**
-   * Check admin email and password for login
-   * @param {Object} req
-   * @returns
-   */
+    async verifyUser(token){
+        try{
+            const validUser = jwt.verifyToken(token);
+            return true;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+    async signout(req,res,next){
+        try{
+            console.log("Token : "+req.body.credential);
+            console.log("Token : "+req.body.email);
+            const isValid = await this.verifyUser(req.body.credential);
+            const checkUser = await admin.update({createdAt:null},{ where:{email : req.body.email}});
+            return true;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }     
+    },
     async adminLogin(req, res, next) {
         try {
             const { email, password } = req.body;
@@ -169,8 +184,19 @@ export default {
             throw Error(error);
         }
     },
+    async getUserData(email){
+        try{
+            const userData = await user.findOne({email});
+            return userData;
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
     async updateProfile(data,email){
         try{
+            console.log("Mausam : "+data)
+            console.log("22 : "+email);
             const userData = await this.getUserData(email);
             let firstName = data?.firstName || userData.firstName;
             let lastName = data?.lastName || userData.lastName;

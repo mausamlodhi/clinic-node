@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         {timestamps:false}
 
     );
-
     doctor.associate = (models) => {
         doctor.belongsTo(models.user, { foreignKey: 'userId' });
 

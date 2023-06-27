@@ -19,24 +19,18 @@ module.exports = (sequelize, DataTypes) => {
             },
             userId: {
                 type: DataTypes.INTEGER,
-                unique: true
-            },
-            clinicId:{
-                type: DataTypes.INTEGER,
-            }
+                references: {
+                  model: 'users', // Name of the referenced table
+                  key: 'id', // Primary key of the referenced table
+                },
+              },
         }
         ,
         {timestamps:false}
     );
-
     patient.associate = (models) => {
-        patient.belongsTo(models.user, { foreignKey: 'userId' });
-        
-        patient.belongsTo(models.clinic, {
-          foreignKey: 'clinicId',
-        });
-      };
-
+        patient.belongsTo(models.users, { foreignKey: 'userId'});
+    }
     return patient;
 
 }

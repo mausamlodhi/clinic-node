@@ -1,3 +1,4 @@
+import user from "../models/user";
 import repositories from "../repositories";
 import HttpStatus from "http-status";
 
@@ -12,7 +13,7 @@ export default {
          */
     async signup(req, res, next) {
         try {
-            //console.log(req.body);
+            console.log(req.body);
             const userSignup = await accountRepository.userSignup(req);
             if (userSignup) {
                 res.status(HttpStatus.OK).json({
@@ -31,6 +32,24 @@ export default {
         }
     },
 
+    async logout(req,res,next){
+        try{
+            if(await accountRepository.signout(req,res,next))
+                return res.status(HttpStatus.OK).json({
+                    success : true,
+                    message : null
+                });
+            else
+                return res.status(HttpStatus.BAD_REQUEST).json({
+                    success : false,
+                    message : "User doesn't exists"
+                })
+        }catch(error){
+            console.log(error);
+            throw Error(error);
+        }
+    },
+
     /**
      * login doctor
      * @param {Object} req
@@ -40,13 +59,12 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
-            console.log(user);
-            if (user.token) {
+            if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
                     data: user,
                 });
-            } else if (user.status === 'inactive') {
+            } else if (user?.status === 'inactive') {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
                     data: [],
@@ -86,14 +104,9 @@ export default {
             console.log(error);
         }
     },
-    /**
-             * login admin
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
     async adminLogin(req, res, next) {
         try {
+            console.log("Login called....")
             const user = await accountRepository.adminLogin(req);
             console.log(user);
             if (user.token) {
@@ -116,14 +129,7 @@ export default {
             console.log(error);
         }
     },
-
-    /**
-             * reset password 
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
-    async resetPassword(req, res) {
+    async resetDoctorPassword(req, res) {
         try {
             const user = await accountRepository.resetDoctorPassword(req);
             if (user) {
@@ -140,6 +146,20 @@ export default {
             }
         } catch (error) {
             console.log(error);
+            throw Error(error);
+        }
+    },
+    async updateProfile(req,res,next){
+        try{
+            console.log("Email : "+req.body.user);
+            const updatedUser = await accountRepository.updateProfile(req.body,req.body.user);
+            return res.status(HttpStatus.OK).json({
+                success : true,
+                message : "Profile Updated..."
+            })
+        }catch(error){
+            console.log(error);
+            throw Error(error);
         }
     },
 

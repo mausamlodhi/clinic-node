@@ -1,14 +1,10 @@
-import bodyParser from "body-parser";;
-import model from "./models/index.js"
-import cors from 'cors';
-import helmet from "helmet";
-import newSequelize from "./services/dbConfig.js";
+import bodyParser from "body-parser";
+import model from "./models/index.js";
 import config from "./config/config.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import compression from "compression";
 import methodOverride from "method-override";
 import express from "express"; 
-import {fileURLToPath} from "url";
 import path, { dirname } from "path";
 import routes from './routes/index.js';
 import swaggerUi from "swagger-ui-express";
@@ -45,7 +41,6 @@ export default class Bootstrap{
         };
         const swaggerFunction = swaggerJSDoc(options);
         console.log("Swagger : "+swaggerFunction);
-        app.use(cors());
         app.use(compression());
         app.use(methodOverride());
         app.use(bodyParser.urlencoded({extended:true}));
@@ -58,7 +53,7 @@ export default class Bootstrap{
         const {sequelize} = model;
         sequelize.authenticate().then((res)=>{
             sequelize.sync().then(()=>{console.log("")}).catch(err=>{console.log(err)})
-            console.log("Database connected successfully")
+            console.log("\n\t\tDo Your Work...!");
         }).catch((error)=>{
             console.log(error);
         })
@@ -69,7 +64,7 @@ export default class Bootstrap{
     start(){
         const {app}=this;
         const port = app.get("port");
-        const server = app.listen(port,()=>{console.log("Server connected on port %d",port)});
+        const server = app.listen(port||5000);
         
     }
 }
