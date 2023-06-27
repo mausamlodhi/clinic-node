@@ -14,8 +14,8 @@ const listArray = [
 ];
 const data = listArray.map((element) => ({
   specialization: element.specialization,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  // createdAt: new Date(),
+  //         updatedAt: new Date(),
 }));
 
 module.exports = {

@@ -31,7 +31,7 @@ export default {
                 return { status: commonConstant.STATUS.INVALID };
             }
         } catch (error) {
-            console.log(error)
+            throw Error(error);
         }
     },
     async verifyUser(token){
@@ -39,19 +39,17 @@ export default {
             const validUser = jwt.verifyToken(token);
             return true;
         }catch(error){
-            console.log(error);
+          
             throw Error(error);
         }
     },
     async signout(req,res,next){
         try{
-            console.log("Token : "+req.body.credential);
-            console.log("Token : "+req.body.email);
             const isValid = await this.verifyUser(req.body.credential);
             const checkUser = await admin.update({createdAt:null},{ where:{email : req.body.email}});
             return true;
         }catch(error){
-            console.log(error);
+            
             throw Error(error);
         }     
     },
@@ -61,7 +59,6 @@ export default {
             const userResult = await user.findOne({ where: { email: email } });
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
-
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
@@ -73,7 +70,7 @@ export default {
                 return { status: commonConstant.STATUS.INVALID };
             }
         } catch (error) {
-            console.log(error)
+            throw Error(error);
         }
     },
      /**
@@ -107,7 +104,6 @@ export default {
                 return false;
             }
         } catch (error) {
-            console.log(error);
             await transaction.rollback();
             throw Error(error);
         }
@@ -129,7 +125,7 @@ export default {
             }
             return false;
         } catch (error) {
-            console.log(error);
+            throw Error(error);
         };
 
     },
@@ -144,21 +140,17 @@ export default {
             throw Error(error);
         }
     },
-    async resetDoctorPassword(req) {
+    async resetPassword(req) {
         try {
             const { id } = req.params;
             const { newPassword } = req.body;
-            console.log(id)
             const userResult = await user.findOne({ where: { password_reset_token: id } });
-            console.log(userResult);
-
             if (userResult) {
                 await this.updatePassword(userResult, newPassword);
                 return true;
             }
             return { status: commonConstant.STATUS.INACTIVE };
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     },
@@ -186,24 +178,19 @@ export default {
             const userData = await user.findOne({email});
             return userData;
         }catch(error){
-            console.log(error);
             throw Error(error);
         }
     },
     async updateProfile(data,email){
         try{
-            console.log("Mausam : "+data)
-            console.log("22 : "+email);
             const userData = await this.getUserData(email);
             let firstName = data?.firstName || userData.firstName;
             let lastName = data?.lastName || userData.lastName;
             let contact = data?.contact || userData?.contact;
             let gender = data?.gender || userData?.gender;
             const result = await user?.update({firstName,lastName,phoneNumber:contact,gender},{where:{email : userData.email}});
-            console.log(result);
             return result;
         }catch(error){
-            console.log(error);
             throw Error(error);
         }
     },
@@ -212,7 +199,6 @@ export default {
             const userData = await user.findOne({email});
             return userData;
         }catch(error){
-            console.log(error);
             throw Error(error);
         }
     },

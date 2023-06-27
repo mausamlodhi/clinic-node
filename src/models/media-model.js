@@ -28,6 +28,8 @@ module.exports = (sequelize, DataTypes) => {
                 return null;
             }
         }
+    },{
+        underscored: true,
     });
     return media;
 }

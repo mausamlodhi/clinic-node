@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
     const doctor = sequelize.define(
         'doctor',
         {
@@ -9,12 +10,18 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
             },
             experience: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
             },
             userId: {
                 type: DataTypes.INTEGER,
+                unique: true
             },
+        },
+        {
+            timestamps: false,
+            underscored: true
         }
+
     );
     doctor.associate = (models) => {
         doctor.belongsTo(models.user, { foreignKey: 'userId' });
@@ -27,6 +34,9 @@ module.exports = (sequelize, DataTypes) => {
             onDelete:"cascade"
         })
     }
-    
+
+
+
     return doctor;
+
 }

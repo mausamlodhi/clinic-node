@@ -28,6 +28,15 @@ fs.readdirSync(__dirname)
       db[modelName].associate(db);
   })
 
+  Object.keys(db).forEach((modelName) => {
+    if (db[modelName].associate) {
+      db[modelName].associate(db);
+    }
+    if (db[modelName].seedData) {
+      db[modelName].seedData(config);
+    }
+  });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

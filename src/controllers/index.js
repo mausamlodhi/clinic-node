@@ -2,16 +2,14 @@ import accountController from './account-controller';
 import mediaControllers from "./media-controllers";
 import doctorController from './doctor-controller';
 import patientController from './patient-controller';
-import clinicControllers from './clinic.controller';
-import doctorClinicController from './doctorClinic-controller';
-import userRoles from './userRoles';
+import clinicController from './clinic-controller';
+import adminController from './admin-controller';
 
 export default{
     accountController,
     mediaControllers,
     doctorController,
     patientController,
-    clinicControllers,
-    doctorClinicController,
-    userRoles
+    clinicController,
+    adminController,
 };

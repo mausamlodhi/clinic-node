@@ -10,8 +10,8 @@ const listArray = [
 ];
 const data = listArray.map((element, index) => ({
   role: element.role,
-  createdAt: new Date(),
-          updatedAt: new Date(),
+  // createdAt: new Date(),
+  // updatedAt: new Date(),
 }));
 
 module.exports = {

@@ -5,22 +5,39 @@ import middlewares from '../middlewares';
 const router = Router();
 const { accountController } = controllers;
 const { accountValidator } = validations;
-const {validateMiddleware} = middlewares;
-  
-router.post("/signup",
-validateMiddleware({ schema: accountValidator.userCreateSchema }),
-accountController.signup);
+const { validateMiddleware } = middlewares;
 
-router.post("/login", 
-validateMiddleware({ schema: accountValidator.loginSchema })
-,accountController.login);
 router.post(
-    '/admin/login',
-    validateMiddleware({ schema: accountValidator.loginSchema }),
-    accountController.adminLogin,
-  );
+  "/signup",
+  validateMiddleware({
+    schema: accountValidator.userCreateSchema
+  }),
+  accountController.signup
+);
 
-router.post('/account/forgot-password', accountController.forgotPassword);
+router.post(
+  "/login",
+  validateMiddleware({
+    schema: accountValidator.loginSchema
+  })
+  , accountController.login
+);
 
-//router.post('/account/reset-password/:id', accountController.resetPassword);
+router.post(
+  '/admin/login',
+  validateMiddleware({
+    schema: accountValidator.loginSchema
+  }),
+  accountController.adminLogin,
+);
+
+router.post(
+  '/account/forgot-password',
+  accountController.forgotPassword
+);
+
+router.post(
+'/account/reset-password/:id',
+ accountController.resetPassword
+ );
 export default router;
