@@ -4,6 +4,12 @@ import HttpStatus from "http-status";
 const { patientRepository } = repositories;
 
 export default {
+    /**
+        * get list of all patients
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
     async getPatients(req, res, next) {
         try {
             const result = await patientRepository.getPatientList(req);
@@ -19,16 +25,29 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error)
+            next(error);
         }
     },
 
+    /**
+        * update patient profile details
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
     async updatePatientProfile(req, res, next) {
 
     },
-    async becomePatient(req, res, next){
+
+    /**
+        * update profile become patient
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
+    async becomePatient(req, res, next) {
         try {
-            const updatedUser = await patientRepository.becomePatient(req.body,req.body.email);
+            const updatedUser = await patientRepository.becomePatient(req.body, req.body.email);
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -41,8 +60,7 @@ export default {
                 });
             }
         } catch (error) {
-            console.log(error);
-            throw Error(error);
+            next(error);
         }
     }
 }

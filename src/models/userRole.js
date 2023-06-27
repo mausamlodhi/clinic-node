@@ -4,29 +4,32 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
-        unique:true
+        unique: true
       },
       roleId: {
         type: DataTypes.INTEGER,
       },
     },
-    {timestamps:false,
+    {
+      timestamps: false,
+      underscored: true,
       indexes: [
         // Create a composite index to enforce uniqueness of the combination (doctorId, clinicId)
         {
           unique: true,
-          fields: ['userId', 'roleId']
+          fields: ['user_id', 'role_id']
         }
-      ],}
+      ],
+    }
   );
 
   userRole.associate = (models) => {
     userRole.belongsTo(models.user, {
-      foreignKey: 'userId',
+      foreignKey: 'user_id',
       onDelete: 'cascade',
     });
     userRole.belongsTo(models.role, {
-      foreignKey: 'roleId',
+      foreignKey: 'role_id',
       onDelete: 'cascade',
     });
   };

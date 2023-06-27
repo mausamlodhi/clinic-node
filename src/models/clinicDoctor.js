@@ -7,26 +7,25 @@ module.exports = (sequelize, DataTypes) => {
         clinicId: {
             type: DataTypes.INTEGER
         }
-    }
-    ,
-    {timestamps:false,
+    },
+    {
+        timestamps:false,
+        underscored: true,
         indexes: [
-            // Create a composite index to enforce uniqueness of the combination (doctorId, clinicId)
             {
               unique: true,
-              fields: ['doctorId', 'clinicId']
+              fields: ['doctor_id', 'clinic_id']
             }
           ],
     })
 
     doctorClinic.associate = (model) => {
         doctorClinic.belongsTo(model.doctor, {
-            foreignKey: 'doctorId',
+            foreignKey: 'doctor_id',
             onDelete: 'cascade'
-
         });
         doctorClinic.belongsTo(model.clinic, {
-            foreignKey: 'clinicId',
+            foreignKey: 'clinic_id',
             onDelete: 'cascade'
         })
     };

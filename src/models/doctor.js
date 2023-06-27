@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
     const doctor = sequelize.define(
-
         'doctor',
         {
             dateOfBirth: {
@@ -18,11 +17,14 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true
             },
         },
-        {timestamps:false}
+        {
+            timestamps: false,
+            underscored: true
+        }
 
     );
     doctor.associate = (models) => {
-        doctor.belongsTo(models.user, { foreignKey: 'userId' });
+        doctor.belongsTo(models.user, { foreignKey: 'user_id' });
 
         // doctor.hasMany(models.clinic, {
         //     through:models.d,

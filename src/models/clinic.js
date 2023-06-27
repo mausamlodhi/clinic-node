@@ -25,11 +25,15 @@ module.exports = (sequelize, DataTypes) => {
         }
 
     },
-        { timestamps: false });
+        {
+            timestamps: false,
+            underscored: true,
+        }
+    );
 
     clinic.associate = (models) => {
         clinic.hasMany(models.patient, {
-            foreignKey: 'clinicId',
+            foreignKey: 'clinic_id',
         });
 
         // clinic.hasMany(models.doctor, {

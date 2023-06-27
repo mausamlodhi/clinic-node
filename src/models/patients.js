@@ -24,15 +24,17 @@ module.exports = (sequelize, DataTypes) => {
             clinicId:{
                 type: DataTypes.INTEGER,
             }
+        },
+        {
+            timestamps:false,
+            underscored: true
         }
-        ,
-        {timestamps:false}
     );
     patient.associate = (models) => {
-        patient.belongsTo(models.user, { foreignKey: 'userId' });
+        patient.belongsTo(models.user, { foreignKey: 'user_id' });
         
         patient.belongsTo(models.clinic, {
-          foreignKey: 'clinicId',
+          foreignKey: 'clinic_id',
         });
       };
 

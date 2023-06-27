@@ -8,6 +8,8 @@ import express from "express";
 import path, { dirname } from "path";
 import routes from './routes/index.js';
 import swaggerUi from "swagger-ui-express";
+import cors from 'cors';
+
 export default class Bootstrap{
     constructor(app){
         this.app = app;

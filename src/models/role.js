@@ -7,14 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
     ,
-    {timestamps:false}
+    {timestamps:false,
+      underscored: true}
   );
   role.associate = (models) => {
-
     role.hasMany(models.userRole, {
-
-      foreignKey: 'roleId',
-
+      foreignKey: 'role_id',
     });
 
   };

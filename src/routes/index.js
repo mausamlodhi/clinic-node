@@ -3,23 +3,39 @@ import account from './account';
 import media from './media-routes.js';
 import user from "./user";
 import admin from './admin';
-import clinics from "./clinic"
-import clinicDoctor from "./doctorClinic-routes";
-import userrole from "./userRoles";
+import HttpStatus from 'http-status';
 
 const router = Router();
 const register = (app) => {
     app.use(router);
     router.use('/api', [
-        account,  
+        account,
         media,
         user,
         admin,
-        clinics,
-        clinicDoctor,
-        userrole,
+    ]);
 
-    ])
+    app.use((error, req, res, next) => {
+        let msg = "Internal server";
+        const internalError = HttpStatus.INTERNAL_SERVER_ERROR;
+        if (error) {
+            console.log(error)
+        }
+        let statusCode = error?.status
+            ? HttpStatus.BAD_REQUEST
+            : internalError;
+        if (error?.status === HttpStatus.UNAUTHORIZED) {
+            statusCode = HttpStatus.UNAUTHORIZED;
+            msg = "Unauthorized";
+        }
+
+        res.status(statusCode).json({
+            success: false,
+            data: null,
+            error,
+            message: msg,
+        });
+    });
 }
 
 export default register;
