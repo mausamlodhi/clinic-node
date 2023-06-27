@@ -31,6 +31,10 @@ module.exports = (sequelize,DataTypes)=>{
         clinic.hasMany(model.patient,{
             foreignKey : "id",
             onDElete : "cascade"
+        }),
+        clinic.hasMany(model.appointment,{
+            foreignKey:"clinicId",
+            onDelete:"cascade"
         })
         
     }

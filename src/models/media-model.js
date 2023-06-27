@@ -6,9 +6,6 @@ module.exports = (sequelize, DataTypes) => {
         basePath: {
             type: DataTypes.STRING(255)
         },
-        baseUrl: {
-            type: DataTypes.STRING(255)
-        },
         mediaType: {
             type: DataTypes.STRING(100)
         },
