@@ -4,12 +4,14 @@ import doctorRepository from "./doctor-repository.js";
 import patientRepository from "./patient-repository.js";
 import clinicRepository from "./clinic-repository.js";
 import adminRepository from './admin-repository.js';
-
+import scheduleRepository from "./schedule-repository.js";
 export default{
     accountRepository,
     media,
     doctorRepository,
     patientRepository,
     clinicRepository,
-    adminRepository
+    adminRepository,
+    scheduleRepository,
+
 }

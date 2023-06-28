@@ -36,7 +36,6 @@ export default {
           insurance: req.insurance,
           userId: userResult.dataValues.id
         }, { transaction });
-        //console.log(result);
         // await patientclinic.create({
         //   userId: userResult.dataValues.id,
         //   clinicId: req.clinicId

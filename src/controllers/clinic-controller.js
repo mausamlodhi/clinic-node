@@ -91,7 +91,7 @@ export default {
                     data: null,
                 });
             } else {
-                res.status(HttpStatus.BAD_REQUEST).json({
+                res.status(HttpStatus.OK).json({
                     success: false,
                     data: null,
                 });

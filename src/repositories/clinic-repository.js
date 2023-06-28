@@ -1,5 +1,5 @@
 import model from "../models";
-
+import accountRepository from "./account-repository";
 const { clinic, doctor, doctorClinic, patient, user } = model;
 import { Op } from 'sequelize';
 
@@ -80,8 +80,9 @@ export default {
    */
   async createClinic(req) {
     try {
-      const { name, address, contact, image } = req.body;
-      const result = await clinic.create({ name, address, contact, image });
+      const { name, address, contact, image,email,password } = req.body;
+      const newPassword = accountRepository.createHashPassword(password);
+      const result = await clinic.create({ name, address, contact, image,email,newPassword });
       return result;
     } catch (error) {
       throw Error(error);
@@ -121,7 +122,6 @@ export default {
     try {
       const { id } = req?.body;
       const isDelete = await clinic.destroy({ where: { id } });
-      console.log("Delete clinic : " + isDelete);
       return isDelete;
     } catch (error) {
       throw Error(error);
@@ -182,7 +182,6 @@ export default {
   //       //       let output = await patient.findOne({
   //       //         where: { id: condition.id },
   //       //       });
-  //       //       console.log(output.userId)
   //       //       let userData = await user.findOne({
   //       //         where: { id: output.userId }
   //       //       })
@@ -198,7 +197,6 @@ export default {
 
   //     // if (doctorId) {
   //     //   const doctorClinicData = await doctorClinic.findAll(searchCriteria);
-  //     //   //console.log(doctorClinicData);
   //     //   const result = [];
 
   //     //   if (doctorClinicData.length > 0) {
@@ -206,11 +204,9 @@ export default {
   //     //       doctorClinicData.map(async (item) => {
   //     //         const objectValue = item;
   //     //         const user = { id: item.clinicId };
-  //     //         //console.log(user)
   //     //         let output = await clinic.findAll({
   //     //           where: { id: user.id },
   //     //         });
-  //     //         console.log(output);
   //     //         await output.map((data) => {
   //     //           item.clinicId = data
   //     //         })
@@ -223,7 +219,6 @@ export default {
 
 
   //   } catch (error) {
-  //     console.log(error)
   //   }
   // },
 

@@ -3,6 +3,7 @@ import account from './account';
 import media from './media-routes.js';
 import user from "./user";
 import admin from './admin';
+import schedules from "./schedule";
 import HttpStatus from 'http-status';
 
 const router = Router();
@@ -13,13 +14,13 @@ const register = (app) => {
         media,
         user,
         admin,
+        schedules
     ]);
 
     app.use((error, req, res, next) => {
         let msg = "Internal server";
         const internalError = HttpStatus.INTERNAL_SERVER_ERROR;
         if (error) {
-            console.log(error)
         }
         let statusCode = error?.status
             ? HttpStatus.BAD_REQUEST

@@ -12,7 +12,6 @@ export default {
          */
     async dashboard(req, res, next) {
         try {
-            //console.log(req.body);
             const result = await adminRepository.dashboard(req);
             if (result) {
                 res.status(HttpStatus.OK).json({
