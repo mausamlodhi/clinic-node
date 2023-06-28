@@ -1,3 +1,4 @@
+import httpStatus from "http-status";
 import user from "../models/user";
 import repositories from "../repositories";
 import HttpStatus from "http-status";
@@ -177,11 +178,14 @@ export default {
     async updateProfile(req, res, next) {
         try {
             const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
-            return res.status(HttpStatus.OK).json({
-                success: true,
-                message: "Profile Updated..."
-            })
+            if(updatedUser){
+                return res.status(HttpStatus.OK).json({
+                    success: true,
+                    message: "Profile Updated..."
+                })
+            }
         } catch (error) {
+            res.status(httpStatus.OK).json({success:true,data:[]});
             next(error);
         }
     }

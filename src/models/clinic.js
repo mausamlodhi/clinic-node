@@ -35,12 +35,15 @@ module.exports = (sequelize, DataTypes) => {
         clinic.hasMany(models.patient, {
             foreignKey: 'clinic_id',
         });
-
-        // clinic.hasMany(models.doctor, {
-        //     through: models.doctorclinic,
-        //     foreignKey: 'clinicId',
-        // });
-    };
-
+        clinic.hasMany(models.patient,{
+            foreignKey : "id",
+            onDElete : "cascade"
+        }),
+        clinic.hasMany(models.appointment,{
+            foreignKey:"clinicId",
+            onDelete:"cascade"
+        })
+        
+    }
     return clinic;
 }
