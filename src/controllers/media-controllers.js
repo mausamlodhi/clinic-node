@@ -64,12 +64,10 @@ export default {
                     const result = await media.createFile(request);
                     response.status(httpStatus.OK).json({data : result,message : "success"});
                 }else{
-                    console.log(error)
                 }
                 next();
             });
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }

@@ -7,10 +7,11 @@ module.exports = (sequelize, DataTypes) => {
             trim: true,
             unique: true,
         },
-        address: {
-            type: DataTypes.STRING(255),
-            required: true,
-            trim: true,
+        email:{
+            type:DataTypes.STRING(30),
+            allowNull:false,
+            trim:true,
+            unidue:true
         },
         contact: {
             type: DataTypes.STRING(13),
@@ -18,10 +19,24 @@ module.exports = (sequelize, DataTypes) => {
             trim: true,
             unique: true
         },
+        password: {
+            type: DataTypes.STRING(100),
+            required: true,
+            trim: true,
+        },
+        address: {
+            type: DataTypes.STRING(255),
+            required: true,
+            trim: true,
+        },
         image: {
             type: DataTypes.STRING(255),
             trim: true,
             unique: true
+        },
+        token:{
+            type:DataTypes.STRING,
+            trim:true
         }
 
     },

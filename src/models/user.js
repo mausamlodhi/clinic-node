@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
                     this.setDataValue('profileImage', tmpStr);
                 },
             },
+            token: {
+                type: DataTypes.STRING,
+                trim: true
+            }
         },
         {
             timestamps: false,

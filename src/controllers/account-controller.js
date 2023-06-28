@@ -6,15 +6,8 @@ import HttpStatus from "http-status";
 const { accountRepository } = repositories;
 
 export default {
-    /**
-         * sign up user
-         * @param {Object} req
-         * @param {Object} res
-         * @param {Function} next
-         */
     async signup(req, res, next) {
         try {
-            console.log(req.body);
             const userSignup = await accountRepository.userSignup(req);
             if (userSignup) {
                 res.status(HttpStatus.OK).json({
@@ -32,13 +25,6 @@ export default {
             next(error);
         }
     },
-
-     /**
-         * sign out user
-         * @param {Object} req
-         * @param {Object} res
-         * @param {Function} next
-         */
     async logout(req, res, next) {
         try {
             if (await accountRepository.signout(req, res, next))
@@ -55,13 +41,6 @@ export default {
             next(error);
         }
     },
-
-    /**
-     * login user
-     * @param {Object} req
-     * @param {Object} res
-     * @param {Function} next
-     */
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
@@ -85,13 +64,6 @@ export default {
             next(error);
         }
     },
-
-    /**
-             * forget password  
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
     async forgotPassword(req, res, next) {
         try {
             const result = await accountRepository.forgotPassword(req);
@@ -111,13 +83,6 @@ export default {
             next(error);
         }
     },
-
-     /**
-         * admin login
-         * @param {Object} req
-         * @param {Object} res
-         * @param {Function} next
-         */
     async adminLogin(req, res, next) {
         try {
             const user = await accountRepository.adminLogin(req);
@@ -141,13 +106,6 @@ export default {
             next(error);
         }
     },
-
-     /**
-             * reset password
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
     async resetPassword(req, res) {
         try {
             const user = await accountRepository.resetPassword(req);
@@ -168,13 +126,6 @@ export default {
             next(error);
         }
     },
-    
-    /**
-                * update profile  user
-                * @param {Object} req
-                * @param {Object} res
-                * @param {Function} next
-                */
     async updateProfile(req, res, next) {
         try {
             const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);

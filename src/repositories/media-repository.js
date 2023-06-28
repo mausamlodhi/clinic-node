@@ -23,7 +23,6 @@ export default {
             result = await media.create(mediaData);
             return result;
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }
