@@ -24,14 +24,15 @@ module.exports = (sequelize, DataTypes) => {
 
     );
     doctor.associate = (models) => {
-        doctor.belongsTo(models.user, { foreignKey: 'user_id' });
-
-        // doctor.hasMany(models.clinic, {
-        //     through:models.d,
-        //     foreignKey: "doctorId",
-        //     onDelete: "cascade"
-        // });
-
+        doctor.belongsTo(models.user, { foreignKey: 'userId' });
+        doctor.hasOne(models.doctorClinic,{
+            foreignKey : "doctorId",
+            onDelete : "cascade"
+        }),
+        doctor.hasMany(models.appointment,{
+            foreignKey:"doctorId",
+            onDelete:"cascade"
+        })
     }
 
 

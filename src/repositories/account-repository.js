@@ -181,15 +181,18 @@ export default {
             throw Error(error);
         }
     },
-    async updateProfile(data,email){
+    async updateProfile(data,userEmail){
         try{
-            const userData = await this.getUserData(email);
+            console.log(userEmail);
+            const userData = await this.getUserData(userEmail);
             let firstName = data?.firstName || userData.firstName;
             let lastName = data?.lastName || userData.lastName;
-            let contact = data?.contact || userData?.contact;
+            let phoneNumber = data?.phoneNumber || userData?.phoneNumber;
             let gender = data?.gender || userData?.gender;
-            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender},{where:{email : userData.email}});
-            return result;
+            const bodyData = {firstName,lastName,phoneNumber,gender}
+            const condition = {where:{email:userEmail}}
+            const result = await user?.update({...bodyData},{where:{id:userData.id}});
+            return result[0];
         }catch(error){
             throw Error(error);
         }
