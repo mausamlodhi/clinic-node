@@ -6,11 +6,11 @@ const { commonConstant } = constant;
 
 export default {
 
-   /**
-   *get patient list
-   * @param {Object} req
-   * @returns
-   */
+  /**
+  *get patient list
+  * @param {Object} req
+  * @returns
+  */
   async getPatientList(req) {
     let searchCriteriaPatient = {
       include: [{ model: user }]
@@ -19,11 +19,11 @@ export default {
     return result;
   },
 
-   /**
-   * update profile become patient
-   * @param {Object} req
-   * @returns
-   */
+  /**
+  * update profile become patient
+  * @param {Object} req
+  * @returns
+  */
   async becomePatient(req, email) {
     const transaction = await model.sequelize.transaction();
     try {
@@ -36,11 +36,6 @@ export default {
           insurance: req.insurance,
           userId: userResult.dataValues.id
         }, { transaction });
-        //console.log(result);
-        // await patientclinic.create({
-        //   userId: userResult.dataValues.id,
-        //   clinicId: req.clinicId
-        // }, { transaction })
 
         const roleData = await role.findOne({
           where: { role: commonConstant.ROLE.PATIENT }

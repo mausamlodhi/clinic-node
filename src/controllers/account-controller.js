@@ -32,12 +32,12 @@ export default {
         }
     },
 
-     /**
-         * sign out user
-         * @param {Object} req
-         * @param {Object} res
-         * @param {Function} next
-         */
+    /**
+        * sign out user
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
     async logout(req, res, next) {
         try {
             if (await accountRepository.signout(req, res, next))
@@ -64,15 +64,11 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
+            //console.log(user)
             if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
                     data: user,
-                });
-            } else if (user?.status === 'inactive') {
-                res.status(HttpStatus.BAD_REQUEST).json({
-                    success: false,
-                    data: [],
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
@@ -111,12 +107,12 @@ export default {
         }
     },
 
-     /**
-         * admin login
-         * @param {Object} req
-         * @param {Object} res
-         * @param {Function} next
-         */
+    /**
+        * admin login
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
     async adminLogin(req, res, next) {
         try {
             const user = await accountRepository.adminLogin(req);
@@ -141,12 +137,12 @@ export default {
         }
     },
 
-     /**
-             * reset password
-             * @param {Object} req
-             * @param {Object} res
-             * @param {Function} next
-             */
+    /**
+            * reset password
+            * @param {Object} req
+            * @param {Object} res
+            * @param {Function} next
+            */
     async resetPassword(req, res) {
         try {
             const user = await accountRepository.resetPassword(req);
@@ -167,7 +163,7 @@ export default {
             next(error);
         }
     },
-    
+
     /**
                 * update profile  user
                 * @param {Object} req

@@ -3,6 +3,10 @@ import account from './account';
 import media from './media-routes.js';
 import user from "./user";
 import admin from './admin';
+import doctor from './doctor';
+import clinic from './clinic';
+import patient from './patient';
+
 import HttpStatus from 'http-status';
 
 const router = Router();
@@ -13,6 +17,9 @@ const register = (app) => {
         media,
         user,
         admin,
+        patient,
+        doctor,
+        clinic
     ]);
 
     app.use((error, req, res, next) => {

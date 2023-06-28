@@ -129,6 +129,7 @@ export default {
                 return false;
             }
         } catch (error) {
+            console.log(error)
             await transaction.rollback();
             throw Error(error);
 

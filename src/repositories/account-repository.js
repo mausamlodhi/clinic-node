@@ -7,7 +7,7 @@ import Email from '../services/email';
 
 const { commonConstant } = constant;
 
-const { user,role,userRole } = models;
+const { user, role, userRole, doctor, doctorSpecialization } = models;
 export default {
     /**
    * Check user email and password for login
@@ -15,43 +15,70 @@ export default {
    * @returns
    */
     async checkLogin(req) {
+
         try {
+            let doctorData,doctorSpecializationData;
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
+            //console.log(userResult.id); //user ki id
+            const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
+            // console.log(userRoles) // role id from role table
+
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
+                //console.log(isPasswordMatch)
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
                     const token = jwt.createToken(userData);
-                    return { token, ...userData };
+
+                    if (userRoles.roleId == 2) {
+                        doctorData = await doctor.findOne({
+                            where: { userId: userResult.id },
+                            // include: [{ model: user }],
+                        });
+
+                        // console.log(doctorData)
+
+                        await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
+                        console.log(doctorSpecializationData);
+                    }
+
+                    return {
+                        token,
+                        ...userData,
+                        roleId: userRoles.roleId,
+                        doctorData,
+                         doctorSpecializationData
+                    };
                 }
             }
             else {
                 return { status: commonConstant.STATUS.INVALID };
             }
         } catch (error) {
+            console.log(error)
             throw Error(error);
         }
     },
-    async verifyUser(token){
-        try{
+    async verifyUser(token) {
+        try {
             const validUser = jwt.verifyToken(token);
             return true;
-        }catch(error){
-          
+        } catch (error) {
+
             throw Error(error);
         }
     },
-    async signout(req,res,next){
-        try{
+    async signout(req, res, next) {
+        try {
             const isValid = await this.verifyUser(req.body.credential);
-            const checkUser = await admin.update({createdAt:null},{ where:{email : req.body.email}});
+            const checkUser = await admin.update({ createdAt: null }, { where: { email: req.body.email } });
             return true;
-        }catch(error){
-            
+        } catch (error) {
+
             throw Error(error);
-        }     
+        }
     },
     async adminLogin(req, res, next) {
         try {
@@ -73,11 +100,11 @@ export default {
             throw Error(error);
         }
     },
-     /**
-   * Check data for user sign up
-   * @param {Object} req
-   * @returns
-   */
+    /**
+  * Check data for user sign up
+  * @param {Object} req
+  * @returns
+  */
     async userSignup(req) {
         const transaction = await models.sequelize.transaction();
         try {
@@ -173,34 +200,30 @@ export default {
             throw Error(error);
         }
     },
-    async getUserData(email){
-        try{
-            const userData = await user.findOne({email});
-            return userData;
-        }catch(error){
-            throw Error(error);
-        }
-    },
-    async updateProfile(data,email){
-        try{
-            const userData = await this.getUserData(email);
+
+    async updateProfile(data, email) {
+        console.log(email)
+        try {
+            const userData = await user.findOne({ where: { email: email } });
             let firstName = data?.firstName || userData.firstName;
             let lastName = data?.lastName || userData.lastName;
             let contact = data?.contact || userData?.contact;
             let gender = data?.gender || userData?.gender;
-            const result = await user?.update({firstName,lastName,phoneNumber:contact,gender},{where:{email : userData.email}});
+            const result = await user?.update({ firstName, lastName, phoneNumber: contact, gender },
+                { where: { email: userData.email } });
+            //console.log(result);
             return result;
-        }catch(error){
+        } catch (error) {
             throw Error(error);
         }
     },
-    async getUserData(email){
-        try{
-            const userData = await user.findOne({email});
-            return userData;
-        }catch(error){
-            throw Error(error);
-        }
-    },
+    // async getUserData(email) {
+    //     try {
+    //         const userData = await user.findOne({ email });
+    //         return userData;
+    //     } catch (error) {
+    //         throw Error(error);
+    //     }
+    // },
 
 }
