@@ -19,7 +19,6 @@ const uploadfiles = multer({
     storage: config.app.mediaStorage === 'local' ? storage : null,
     fileFilter: (request, file, callback) => {
         const ext = path.extname(file.originalname);
-        console.log(file.originalname);
         let fileFormate = [];
         if (request.params.mediaType === 'image')
             fileFormate = ['.img', '.jpeg', '.jpg', '.gif'];
@@ -64,12 +63,10 @@ export default {
                     const result = await media.createFile(request);
                     response.status(httpStatus.OK).json({data : result,message : "success"});
                 }else{
-                    console.log(error)
                 }
                 next();
             });
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }

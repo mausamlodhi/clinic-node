@@ -24,7 +24,7 @@ export default {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
                     const token = jwt.createToken(userData);
-                    return { token, ...userData };
+                    return {...userData,token };
                 }
             }
             else {
@@ -183,7 +183,6 @@ export default {
     },
     async updateProfile(data,userEmail){
         try{
-            console.log(userEmail);
             const userData = await this.getUserData(userEmail);
             let firstName = data?.firstName || userData.firstName;
             let lastName = data?.lastName || userData.lastName;

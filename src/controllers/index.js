@@ -4,7 +4,7 @@ import doctorController from './doctor-controller';
 import patientController from './patient-controller';
 import clinicController from './clinic-controller';
 import adminController from './admin-controller';
-
+import scheduleController from './schedule-controller';
 export default{
     accountController,
     mediaControllers,
@@ -12,4 +12,6 @@ export default{
     patientController,
     clinicController,
     adminController,
+    scheduleController,
+    
 };

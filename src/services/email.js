@@ -22,11 +22,9 @@ export default {
             subject: 'Your OTP',
             text: 'Your Otp ' + data.token
         };
-        console.log("........................inside send otp")
         return transporter.sendMail(mailOptions);
     }
     catch(error){
-        console.log(error);
     }
     },
 
