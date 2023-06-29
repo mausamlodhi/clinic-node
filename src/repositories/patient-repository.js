@@ -1,5 +1,6 @@
 import model from "../models";
 import constant from "../constants";
+import moment from "moment";
 
 const { user, patient, role, userRole } = model;
 const { commonConstant } = constant;
@@ -16,14 +17,6 @@ export default {
     };
     let result = await patient.findAll(searchCriteriaPatient);
     return result;
-  },
-  async getUserData(email) {
-    try {
-      const userData = await user.findOne({ where: { email } });
-      return userData;
-    } catch (error) {
-      throw Error(error);
-    }
   },
 
   /**
@@ -68,19 +61,13 @@ export default {
       throw Error(error);
     }
   },
-  /**
-   * update doctor profile detail
-   * @param {Object} req
-   * @returns
-   */
+
   async updateProfile(data) {
     const transaction = await model.sequelize.transaction();
     try {
       const userData = await this.getUserData(data.email);
       const patientData = await this.getPatientData(userData.dataValues.id);
-      const formattedDate = moment(patientData.dateOfBirth).format(
-        "YYYY-MM-DD"
-      );
+      const formattedDate = moment(patientData.dateOfBirth).format("YYYY-MM-DD");
 
       let firstName = data?.firstName || userData.firstName;
       let lastName = data?.lastName || userData.lastName;
@@ -113,6 +100,24 @@ export default {
       return result, output;
     } catch (error) {
       await transaction.rollback();
+      throw Error(error);
+    }
+  },
+
+  async getUserData(email) {
+    try {
+      const userData = await user.findOne({ where: { email } });
+      return userData;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  async getPatientData(id) {
+    try {
+      const userData = await patient.findOne({ where: { userId: id } });
+      return userData;
+    } catch (error) {
       throw Error(error);
     }
   },

@@ -37,6 +37,7 @@ export default {
    */
   async updatePatientProfile(req, res, next) {
     try {
+      console.log(req.body);
       const updatedUser = await patientRepository.updateProfile(req.body);
       if (updatedUser) {
         res.status(HttpStatus.OK).json({

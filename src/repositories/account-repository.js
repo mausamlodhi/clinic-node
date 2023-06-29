@@ -40,9 +40,11 @@ export default {
             });
             console.log(doctorSpecializationData);
           }
+
           if (userRoles.roleId == 3) {
             patientData = await patient.findOne({
               where: { userId: userResult.id },
+              include:[{model:user}]
             });
           }
 
@@ -59,8 +61,6 @@ export default {
         return { status: commonConstant.STATUS.INVALID };
       }
     } catch (error) {
-      console.log(error);
-
       throw Error(error);
     }
   },
