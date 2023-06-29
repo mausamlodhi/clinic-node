@@ -29,16 +29,16 @@ module.exports = (sequelize,DataTypes)=>{
             allowNull:false
         }
     });
-    // appointmentSchema.associate=(model)=>{
-    //     appointmentSchema.belongsTo(model.patient,{
-    //         foreignKey:"patientId"
-    //     }),
-    //     appointmentSchema.belongsTo(model.doctor,{
-    //         foreignKey:"doctorId"
-    //     }),
-    //     appointmentSchema.belongsTo(model.clinic,{
-    //         foreignKey:"clinicId"
-    //     })
-    // }
+    appointmentSchema.associate=(model)=>{
+        appointmentSchema.belongsTo(model.patient,{
+            foreignKey:"patientId"
+        }),
+        appointmentSchema.belongsTo(model.doctor,{
+            foreignKey:"doctorId"
+        }),
+        appointmentSchema.belongsTo(model.clinic,{
+            foreignKey:"clinicId"
+        })
+    }
     return appointmentSchema;
 }

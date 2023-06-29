@@ -39,10 +39,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey : "id",
             onDElete : "cascade"
         })
-        // clinic.hasMany(models.appointment,{
-        //     foreignKey:"clinicId",
-        //     onDelete:"cascade"
-        // })
+        clinic.hasMany(models.appointment,{
+            foreignKey:"clinicId",
+            onDelete:"cascade"
+        })
         
     }
     return clinic;
