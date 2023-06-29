@@ -2,16 +2,22 @@ import { Router } from "express";
 import account from "./account";
 import media from "./media-routes.js";
 import user from "./user";
-import admin from "./admin";
-import patient from "./patient";
-import doctor from "./doctor";
-import clinic from "./clinic";
-import HttpStatus from "http-status";
+import admin from './admin';
+import schedules from "./schedule";
+import appointment from "./appointment";
+import HttpStatus from 'http-status';
 
 const router = Router();
 const register = (app) => {
-  app.use(router);
-  router.use("/api", [account, media, user, admin, patient, doctor, clinic]);
+    app.use(router);
+    router.use('/api', [
+        account,
+        media,
+        user,
+        admin,
+        schedules,
+        appointment
+    ]);
 
   app.use((error, req, res, next) => {
     let msg = "Internal server";
