@@ -4,6 +4,7 @@ import media from './media-routes.js';
 import user from "./user";
 import admin from './admin';
 import schedules from "./schedule";
+import appointment from "./appointment";
 import HttpStatus from 'http-status';
 
 const router = Router();
@@ -14,7 +15,8 @@ const register = (app) => {
         media,
         user,
         admin,
-        schedules
+        schedules,
+        appointment
     ]);
 
     app.use((error, req, res, next) => {
