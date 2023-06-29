@@ -32,11 +32,7 @@ module.exports = (sequelize, DataTypes) => {
                     tmpStr = tmpStr.replace(/\\/g, '/');
                     this.setDataValue('profileImage', tmpStr);
                 },
-            },
-            token: {
-                type: DataTypes.STRING,
-                trim: true
-            }
+            },  
         },
         {
             timestamps: false,
