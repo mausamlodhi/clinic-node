@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import account from './account';
-import media from './media-routes.js';
+import { Router } from "express";
+import account from "./account";
+import media from "./media-routes.js";
 import user from "./user";
 import admin from './admin';
 import schedules from "./schedule";
@@ -19,26 +19,25 @@ const register = (app) => {
         appointment
     ]);
 
-    app.use((error, req, res, next) => {
-        let msg = "Internal server";
-        const internalError = HttpStatus.INTERNAL_SERVER_ERROR;
-        if (error) {
-        }
-        let statusCode = error?.status
-            ? HttpStatus.BAD_REQUEST
-            : internalError;
-        if (error?.status === HttpStatus.UNAUTHORIZED) {
-            statusCode = HttpStatus.UNAUTHORIZED;
-            msg = "Unauthorized";
-        }
+  app.use((error, req, res, next) => {
+    let msg = "Internal server";
+    const internalError = HttpStatus.INTERNAL_SERVER_ERROR;
+    if (error) {
+      console.log(error);
+    }
+    let statusCode = error?.status ? HttpStatus.BAD_REQUEST : internalError;
+    if (error?.status === HttpStatus.UNAUTHORIZED) {
+      statusCode = HttpStatus.UNAUTHORIZED;
+      msg = "Unauthorized";
+    }
 
-        res.status(statusCode).json({
-            success: false,
-            data: null,
-            error,
-            message: msg,
-        });
+    res.status(statusCode).json({
+      success: false,
+      data: null,
+      error,
+      message: msg,
     });
-}
+  });
+};
 
 export default register;
