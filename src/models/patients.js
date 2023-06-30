@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             address: {
                 type: DataTypes.STRING,
             },
-
             diabitic: {
                 type: DataTypes.STRING,
             },

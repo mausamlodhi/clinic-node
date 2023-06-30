@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
             passwordResetToken: {
                 type: DataTypes.STRING(191),
             },
+            token:{
+                type:DataTypes.STRING(1500),
+                allowNull:true,
+                trim:true
+            },
             profileImage: {
                 type: DataTypes.STRING,
                 set(val) {

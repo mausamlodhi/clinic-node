@@ -83,6 +83,15 @@ export default {
             next(error);
         }
     },
+    async signOut(req,res,next){
+        try{
+            const data = req.body.id;
+            const result=await accountRepository.signOut(data);
+            res.status(httpStatus.OK).json({data:[],success:true});
+        }catch(error){
+            next(error);
+        }
+    },
     async adminLogin(req, res, next) {
         try {
             const user = await accountRepository.adminLogin(req);

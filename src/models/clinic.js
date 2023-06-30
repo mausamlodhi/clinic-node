@@ -18,6 +18,16 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             trim: true,
         },
+        email:{
+            type:DataTypes.STRING,
+            allowNull:false,
+            trim:true
+        },
+        password:{
+            type:DataTypes.STRING,
+            trim:true,
+            allowNull:false
+        },
         image: {
             type: DataTypes.STRING(255),
             trim: true,
