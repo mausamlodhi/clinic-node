@@ -46,9 +46,6 @@ router.get(
 
 router.post(
   "/create-clinic",
-  validateMiddleware({
-    schema: clinicValidator.uploadClinic
-  }),
   clinicController.createClinic
 );
 
