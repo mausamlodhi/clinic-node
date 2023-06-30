@@ -9,15 +9,15 @@ const { commonConstant } = constant;
 
 const { user, role, userRole, doctor, doctorSpecialization } = models;
 export default {
-  /**
-   * Check user email and password for login
-   * @param {Object} req
-   * @returns
-   */
+    /**
+     * Check user email and password for login
+     * @param {Object} req
+     * @returns
+     */
     async checkLogin(req) {
 
         try {
-            let doctorData,doctorSpecializationData;
+            let doctorData, doctorSpecializationData;
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
             //console.log(userResult.id); //user ki id
@@ -37,11 +37,9 @@ export default {
                             where: { userId: userResult.id },
                             // include: [{ model: user }],
                         });
-
                         // console.log(doctorData)
-
                         await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
-                        console.log(doctorSpecializationData);
+                        // console.log(doctorSpecializationData);
                     }
 
                     return {
@@ -49,7 +47,7 @@ export default {
                         ...userData,
                         roleId: userRoles.roleId,
                         doctorData,
-                         doctorSpecializationData
+                        doctorSpecializationData
                     };
                 }
             }
@@ -80,11 +78,16 @@ export default {
             throw Error(error);
         }
     },
+
     async adminLogin(req, res, next) {
         try {
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
-            if (userResult) {
+
+            const userRoles = await userRole.findOne({where:{role_id: 1}});
+            // console.log(userRoles.roleId);
+            
+            if (userResult && userRoles.roleId==1) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
@@ -134,26 +137,26 @@ export default {
             await transaction.rollback();
             throw Error(error);
         }
-       
-  },
-  async forgotPassword(req) {
-    try {
-      const userResult = await user.findOne({
-        where: { email: req.body.email },
-      });
-      if (userResult) {
-        req.forgotUser = userResult;
-        const data = {
-          to: userResult.dataValues.email,
-          // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
-        }; return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    await transaction.rollback();
-    throw Error(error);
-  }
+
+    },
+    async forgotPassword(req) {
+        try {
+            const userResult = await user.findOne({
+                where: { email: req.body.email },
+            });
+            if (userResult) {
+                req.forgotUser = userResult;
+                const data = {
+                    to: userResult.dataValues.email,
+                    // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
+                }; return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            await transaction.rollback();
+            throw Error(error);
+        }
 
     },
     async generatePasswordResetToken(req) {

@@ -101,15 +101,10 @@ export default {
                     success: true,
                     data: user,
                 });
-            } else if (user.status === 'inactive') {
-                res.status(HttpStatus.BAD_REQUEST).json({
-                    success: false,
-                    data: [],
-                });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
-                    data: [],
+                    msg:"Email or password is incorrect"
                 });
             }
         } catch (error) {
@@ -153,14 +148,14 @@ export default {
     async updateProfile(req, res, next) {
         try {
             const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
-            if(updatedUser){
+            if (updatedUser) {
                 return res.status(HttpStatus.OK).json({
                     success: true,
                     message: "Profile Updated..."
                 })
             }
         } catch (error) {
-            res.status(httpStatus.OK).json({success:true,data:[]});
+            res.status(httpStatus.OK).json({ success: true, data: [] });
             next(error);
         }
     }

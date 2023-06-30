@@ -64,11 +64,15 @@ export default {
         try {
             const clinic = await clinicRepository.createClinic(req);
             if (clinic) {
-                res.status(HttpStatus.OK).json({ message: "Clinic added success...", success: true });
+                res.status(HttpStatus.OK).json({ 
+                    message: "Clinic added success...", 
+                    success: true 
+                });
             }
             else
                 res.status(HttpStatus.BAD_REQUEST).json({
-                    message: "Ohho someThing went wrong", success: false
+                    message: "someThing went wrong",
+                     success: false
                 })
         } catch (error) {
 
