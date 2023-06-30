@@ -5,6 +5,8 @@ import patientController from './patient-controller';
 import clinicController from './clinic-controller';
 import adminController from './admin-controller';
 import scheduleController from './schedule-controller';
+import appointmentController from './appointment-controller';
+
 export default{
     accountController,
     mediaControllers,
@@ -13,5 +15,6 @@ export default{
     clinicController,
     adminController,
     scheduleController,
+    appointmentController,
     
 };
