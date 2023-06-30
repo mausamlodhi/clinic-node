@@ -40,4 +40,9 @@ router.post(
 '/account/reset-password/:id',
  accountController.resetPassword
  );
+
+ router.post(
+  "/signout",
+  accountController.signOut
+ );
 export default router;

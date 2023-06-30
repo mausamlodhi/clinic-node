@@ -9,6 +9,7 @@ module.exports = (sequelize,DataTypes)=>{
             type:DataTypes.STRING(15),
             required:true,
             allowNull:false,
+            trim:true
         },
         appointmentDuration:{
             type:DataTypes.STRING(12),

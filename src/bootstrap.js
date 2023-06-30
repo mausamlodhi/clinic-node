@@ -57,7 +57,7 @@ export default class Bootstrap{
             sequelize.sync().then(()=>{console.log("")}).catch(err=>{console.log(err)})
             console.log("\tDatabase connected");
         }).catch((error)=>{
-            console.log(error);
+            throw error;
         })
     }
     routes(){

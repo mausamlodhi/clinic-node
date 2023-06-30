@@ -29,7 +29,6 @@ const register = (app) => {
     let msg = "Internal server";
     const internalError = HttpStatus.INTERNAL_SERVER_ERROR;
     if (error) {
-      console.log(error);
     }
     let statusCode = error?.status ? HttpStatus.BAD_REQUEST : internalError;
     if (error?.status === HttpStatus.UNAUTHORIZED) {

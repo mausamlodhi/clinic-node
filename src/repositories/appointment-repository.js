@@ -19,7 +19,7 @@ export default {
             });
             return isAvialable;
         }catch(error){
-            console.log(error);
+            throw error;
         }
     },
     async makeAnAppointment(req){
@@ -33,7 +33,7 @@ export default {
                 return false;
             }
         }catch(error){
-            console.log(error);
+            throw error;
         }
     }
 }
