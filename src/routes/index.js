@@ -1,8 +1,11 @@
-import { Router } from "express";
-import account from "./account";
-import media from "./media-routes.js";
+import { Router } from 'express';
+import account from './account';
+import media from './media';
 import user from "./user";
 import admin from './admin';
+import doctor from './doctor';
+import clinic from './clinic';
+import patient from './patient';
 import schedules from "./schedule";
 import appointment from "./appointment";
 import HttpStatus from 'http-status';
@@ -15,6 +18,9 @@ const register = (app) => {
         media,
         user,
         admin,
+        patient,
+        doctor,
+        clinic,
         schedules,
         appointment
     ]);
