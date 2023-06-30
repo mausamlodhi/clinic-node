@@ -14,7 +14,6 @@ const updateDoctorProfileSchema = Joi.object({
     "date.format": "date format is invalid",
     "any.required": "DATE is required",
   }),
-  // .required()
   address: Joi.string().required(),
   experience: Joi.string().required(),
   specializationId: Joi.number().integer().required(),
