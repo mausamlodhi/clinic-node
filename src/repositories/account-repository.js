@@ -14,51 +14,54 @@ export default {
    * @param {Object} req
    * @returns
    */
+
+  async signOut(id) {
+    try {
+      const data = await user.update({ token: null }, { where: { id } });
+    } catch (error) {
+      throw error;
+    }
+  },
   async checkLogin(req) {
     try {
       let doctorData, doctorSpecializationData;
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
-      //console.log(userResult.id); //user ki id
-      const userRoles = await userRole.findOne({
-        where: { userId: userResult.id },
-      });
-      // console.log(userRoles) // role id from role table
-
+      const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
       if (userResult) {
-        const isPasswordMatch = await bcrypt.compare(
-          password,
-          userResult.password
-        );
-        //console.log(isPasswordMatch)
+        const isPasswordMatch = await bcrypt.compare(password, userResult.password);
         if (isPasswordMatch) {
           // here token will be created and send the reponse
           const { ...userData } = userResult.get();
-          const token = jwt.createToken(userData);
-
+          const token = jwt.createToken({ name: userData?.name, email: userData?.email, password: userData?.password });
+          const updateToken = await user.update({ token }, { where: { id: userResult.id } });
+          // user.findOne({ where: { id: userResult.id } })
+          //   .on('success', function (project) {
+          //     // Check if record exists in db
+          //     if (project) {
+          //       project.update({
+          //         token:newToken,
+          //       })
+          //         .success(function () { })
+          //     }
+          //   })
           if (userRoles.roleId == 2) {
             doctorData = await doctor.findOne({
               where: { userId: userResult.id },
               // include: [{ model: user }],
             });
-
-            // console.log(doctorData)
-
-            await doctorSpecialization.findAll({
-              where: { doctorId: doctorData.id },
-            });
-            console.log(doctorSpecializationData);
+            await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
           }
-
           return {
             token,
             ...userData,
             roleId: userRoles.roleId,
             doctorData,
-            doctorSpecializationData,
+            doctorSpecializationData
           };
         }
-      } else {
+      }
+      else {
         return { status: commonConstant.STATUS.INVALID };
       }
     } catch (error) {
@@ -99,7 +102,7 @@ export default {
           // here token will be created and send the reponse
           const { ...userData } = userResult.get();
           const token = jwt.createToken(userData);
-          return { token, ...userData };
+          return { ...userData, token };
         }
       } else {
         return { status: commonConstant.STATUS.INVALID };
@@ -214,9 +217,8 @@ export default {
   },
 
   async updateProfile(data, email) {
-    console.log(email);
     try {
-      const userData = await user.findOne({ where: { email: email } });
+      const userData = await this.getUserData(userEmail);
       let firstName = data?.firstName || userData.firstName;
       let lastName = data?.lastName || userData.lastName;
       let contact = data?.contact || userData?.contact;
