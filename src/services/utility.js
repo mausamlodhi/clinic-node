@@ -15,7 +15,6 @@ export default {
           const i = Math.floor(Math.random() * 62);
           output += chars.charAt(i);
         }
-        console.log(output)
         return output;
       },
     convertFormate(dateTime, formate = 'YYYY-MM-DD') {
@@ -33,7 +32,6 @@ export default {
                 day: dt.getDate()
             };
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     },
@@ -41,7 +39,6 @@ export default {
         try {
             return Math.floor(10 ** (length - 1) + Math.random() * 9 * 10 ** (length - 1))
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     },

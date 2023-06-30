@@ -31,13 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
     patient.associate = (models) => {
-        patient.belongsTo(models.user, { foreignKey: 'user_id' });
-        
+        patient.belongsTo(models.user, { foreignKey: 'userId'});
+        patient.hasMany(models.appointment,{
+           foreignKey:"patientId",
+           onDelete:"cascade" 
+        }),
         patient.belongsTo(models.clinic, {
           foreignKey: 'clinic_id',
         });
-      };
-
+    }
     return patient;
-
 }

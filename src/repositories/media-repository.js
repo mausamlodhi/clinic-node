@@ -17,14 +17,13 @@ export default {
                 name: file.filename || file.originalname,
                 basePath: file.path,
                 imagePath: imageDir,
-                baseUrl: `${HTTPs}://${headers.host}/${file.path}`,
                 mediaType,
                 mediaFor,
             }
+            console.log("file.filename");
             result = await media.create(mediaData);
             return result;
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }

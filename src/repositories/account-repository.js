@@ -1,15 +1,15 @@
-import bcrypt from 'bcryptjs';
-import models from '../models';
-import jwt from '../services/jwt';
-import constant from '../constants';
-import utility from '../services/utility';
-import Email from '../services/email';
+import bcrypt from "bcryptjs";
+import models from "../models";
+import jwt from "../services/jwt";
+import constant from "../constants";
+import utility from "../services/utility";
+import Email from "../services/email";
 
 const { commonConstant } = constant;
 
 const { user, role, userRole, doctor, doctorSpecialization } = models;
 export default {
-    /**
+  /**
    * Check user email and password for login
    * @param {Object} req
    * @returns
@@ -134,26 +134,26 @@ export default {
             await transaction.rollback();
             throw Error(error);
         }
-    },
-    async forgotPassword(req) {
-        try {
-            const userResult = await user.findOne({ where: { email: req.body.email } });
-            if (userResult) {
-                req.forgotUser = userResult;
-                const data = {
-                    to: userResult.dataValues.email,
-                    // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
-                };
-                const result = await this.generatePasswordResetToken(req);
-                data.token = result.passwordResetToken;
-                return await Email.sendOtp(data)
-                    .then(() => ({ status: 'sent' }))
-                    .catch((error) => ({ status: 'send_error', error }));
-            }
-            return false;
-        } catch (error) {
-            throw Error(error);
-        };
+       
+  },
+  async forgotPassword(req) {
+    try {
+      const userResult = await user.findOne({
+        where: { email: req.body.email },
+      });
+      if (userResult) {
+        req.forgotUser = userResult;
+        const data = {
+          to: userResult.dataValues.email,
+          // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
+        }; return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    await transaction.rollback();
+    throw Error(error);
+  }
 
     },
     async generatePasswordResetToken(req) {

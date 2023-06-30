@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
                 unique: true
             },
             password: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING(500),
             },
             gender: {
                 type: DataTypes.STRING(256),
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
                     tmpStr = tmpStr.replace(/\\/g, '/');
                     this.setDataValue('profileImage', tmpStr);
                 },
-            },
+            },  
         },
         {
             timestamps: false,

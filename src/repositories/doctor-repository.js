@@ -187,8 +187,6 @@ export default {
             //     { where: { userId: doctorData.userId } },
             //     { transaction });
 
-            //console.log(result);
-
             await transaction.commit();
             return {
                     ...userData,
@@ -223,7 +221,6 @@ export default {
     //         const userData = await doctorSpecialization.findAll({ where: { userId: id } });
     //         return userData;
     //     } catch (error) {
-    //         console.log(error);
     //         throw Error(error);
     //     }
     // }

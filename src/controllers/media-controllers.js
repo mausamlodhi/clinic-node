@@ -15,13 +15,11 @@ const storage = multer.diskStorage({
     },
 
 });
-
-
 const uploadfiles = multer({
     storage: config.app.mediaStorage === 'local' ? storage : null,
     fileFilter: (request, file, callback) => {
         const ext = path.extname(file.originalname);
-        console.log("EXT : " + ext)
+        console.log(file.originalname);
         let fileFormate = [];
         if (request.params.mediaType === 'image')
             fileFormate = ['.img', '.jpeg', '.jpg', '.gif'];
@@ -45,7 +43,6 @@ const uploadfiles = multer({
                 '.docx',
                 '.mp4',
             ]
-        console.log(fileFormate + "**********");
         if (!fileFormate.indexOf(ext.toLocaleLowerCase()) === -1) {
             return callback(new Error(`Allowed file formate ${fileFormate.toString()}`))
         }
@@ -62,18 +59,15 @@ export default {
             const {mediaFor} = params;
             params.mediaType = mediaType;
             params.mediaFor = mediaFor;
-            console.log("Media type : " + mediaType);
-            console.log("Params : " + mediaFor);
             uploadfiles.single('image')(request, response, async (error) => {
                 if (!error) {
                     const result = await media.createFile(request);
+                    response.status(httpStatus.OK).json({data : result,message : "success"});
                 }else{
-                    console.log(error)
                 }
                 next();
             });
         } catch (error) {
-            console.log(error);
             throw Error(error);
         }
     }

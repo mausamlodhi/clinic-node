@@ -1,5 +1,4 @@
 import Joi from "joi";
-console.log("Yaha pe aa gya 1");
 const patientProfileSchema = Joi.object({
     name : Joi.string().min(3).max(30).messages({
         "any.require" : "NAME_REQUIRED",
