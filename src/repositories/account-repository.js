@@ -44,7 +44,7 @@ export default {
           if (userRoles.roleId == 3) {
             patientData = await patient.findOne({
               where: { userId: userResult.id },
-              include:[{model:user}]
+              include: [{ model: user }],
             });
           }
 
@@ -88,7 +88,10 @@ export default {
     try {
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
-      if (userResult) {
+      const adminData = await userRole.findOne({
+        where: { userId: userResult?.id, roleId: 1 },
+      });
+      if (adminData) {
         const isPasswordMatch = await bcrypt.compare(
           password,
           userResult.password
