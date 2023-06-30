@@ -7,9 +7,6 @@ export default {
             const date = req.body.appointmentDate;
             const duration=req.body.appointmentDuration;
             const doctorId=req.body.doctorId;
-            // const isAvialable = await appointment.findAll({
-            //     where:Sequelize.where(Sequelize.fn("29/06/2023",Sequelize.col("appointmentDate")),{[Op.eq]:""})
-            // });
             const isAvialable=await appointment.findAll({
                 where:{
                     doctorId,

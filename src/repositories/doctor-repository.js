@@ -200,13 +200,5 @@ export default {
             throw Error(error);
         }
     },
-    // async getDoctorSpecializationData(id) {
-    //     try {
-    //         const userData = await doctorSpecialization.findAll({ where: { userId: id } });
-    //         return userData;
-    //     } catch (error) {
-    //         throw Error(error);
-    //     }
-    // }
 }
 

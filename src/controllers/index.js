@@ -16,5 +16,4 @@ export default{
     adminController,
     scheduleController,
     appointmentController,
-    
 };
