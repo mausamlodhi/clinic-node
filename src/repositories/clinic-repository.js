@@ -81,10 +81,11 @@ export default {
   async createClinic(req) {
     try {
       const { name, address, contact, image,email,password } = req.body;
-      const newPassword = accountRepository.createHashPassword(password);
-      const result = await clinic.create({ name, address, contact, image,email,newPassword });
+      const newPassword = await accountRepository.createHashPassword(password);
+      const result = await clinic.create({ name, address, contact, image,email,password:newPassword });
       return result;
     } catch (error) {
+      console.log(error);
       throw Error(error);
     }
   },

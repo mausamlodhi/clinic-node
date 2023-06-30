@@ -86,6 +86,7 @@ export default {
     async signOut(req,res,next){
         try{
             const data = req.body.id;
+            console.log(data);
             const result=await accountRepository.signOut(data);
             res.status(httpStatus.OK).json({data:[],success:true});
         }catch(error){
