@@ -6,8 +6,7 @@ import utility from "../services/utility";
 import Email from "../services/email";
 
 const { commonConstant } = constant;
-
-const { user, role, userRole, doctor, doctorSpecialization } = models;
+const { user, role, userRole, doctor, doctorSpecialization, patient } = models;
 export default {
   /**
    * Check user email and password for login
@@ -24,48 +23,56 @@ export default {
   },
   async checkLogin(req) {
     try {
-      let doctorData, doctorSpecializationData;
+      let doctorData, doctorSpecializationData, patientData;
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
-      const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
+      const userRoles = await userRole.findOne({
+        where: { userId: userResult.id },
+      });
       if (userResult) {
-        const isPasswordMatch = await bcrypt.compare(password, userResult.password);
+        const isPasswordMatch = await bcrypt.compare(
+          password,
+          userResult.password
+        );
         if (isPasswordMatch) {
-          // here token will be created and send the reponse
           const { ...userData } = userResult.get();
-          const token = jwt.createToken({ name: userData?.name, email: userData?.email, password: userData?.password });
-          const updateToken = await user.update({ token }, { where: { id: userResult.id } });
-          // user.findOne({ where: { id: userResult.id } })
-          //   .on('success', function (project) {
-          //     // Check if record exists in db
-          //     if (project) {
-          //       project.update({
-          //         token:newToken,
-          //       })
-          //         .success(function () { })
-          //     }
-          //   })
+          const token = jwt.createToken({
+            name: userData?.name,
+            email: userData?.email,
+            password: userData?.password,
+          });
+          const updateToken = await user.update(
+            { token },
+            { where: { id: userResult.id } }
+          );
+
           if (userRoles.roleId == 2) {
             doctorData = await doctor.findOne({
               where: { userId: userResult.id },
-              // include: [{ model: user }],
             });
-            await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
+            await doctorSpecialization.findAll({
+              where: { doctorId: doctorData.id },
+            });
+          }
+          if (userRoles.roleId == 3) {
+            patientData = await patient.findOne({
+              where: { userId: userResult.id },
+              include: [{ model: user }],
+            });
           }
           return {
             token,
             ...userData,
             roleId: userRoles.roleId,
             doctorData,
-            doctorSpecializationData
+            patientData,
+            doctorSpecializationData,
           };
         }
-      }
-      else {
+      } else {
         return { status: commonConstant.STATUS.INVALID };
       }
     } catch (error) {
-      console.log(error);
       throw Error(error);
     }
   },
@@ -77,6 +84,7 @@ export default {
       throw Error(error);
     }
   },
+
   async signout(req, res, next) {
     try {
       const isValid = await this.verifyUser(req.body.credential);
@@ -90,19 +98,23 @@ export default {
     }
   },
   async adminLogin(req, res, next) {
+    console.log(res);
     try {
       const { email, password } = req.body;
+      console.log(req.body);
       const userResult = await user.findOne({ where: { email: email } });
-      if (userResult) {
+      const adminData = await userRole.findOne({
+        where: { userId: userResult?.id, roleId: 1 },
+      });
+      if (adminData) {
         const isPasswordMatch = await bcrypt.compare(
           password,
           userResult.password
         );
         if (isPasswordMatch) {
-          // here token will be created and send the reponse
           const { ...userData } = userResult.get();
           const token = jwt.createToken(userData);
-          return { ...userData, token };
+          return { token, ...userData };
         }
       } else {
         return { status: commonConstant.STATUS.INVALID };
@@ -124,7 +136,6 @@ export default {
       });
       if (!userResult) {
         const bodyData = req.body;
-        //let hashPassword= this.createHashPassword(bodyData.password);
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(bodyData.password, salt);
         bodyData.password = hashPassword;
@@ -158,7 +169,6 @@ export default {
         req.forgotUser = userResult;
         const data = {
           to: userResult.dataValues.email,
-          // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
         };
         return true;
       } else {
@@ -229,6 +239,14 @@ export default {
       );
 
       return result;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+  async getUserData(email) {
+    try {
+      const userData = await user.findOne({ email });
+      return userData;
     } catch (error) {
       throw Error(error);
     }
