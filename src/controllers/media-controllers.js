@@ -19,7 +19,6 @@ const uploadfiles = multer({
     storage: config.app.mediaStorage === 'local' ? storage : null,
     fileFilter: (request, file, callback) => {
         const ext = path.extname(file.originalname);
-        console.log(file.originalname);
         let fileFormate = [];
         if (request.params.mediaType === 'image')
             fileFormate = ['.img', '.jpeg', '.jpg', '.gif'];

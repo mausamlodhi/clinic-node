@@ -11,11 +11,11 @@ module.exports=(sequelize,DataTypes)=>{
             trim:true
         }
     });
-    // schedule.associate=(model)=>{
-    //     schedule.belongsTo(model.doctor,{
-    //         foreignKey:"doctorId",
-    //         onDelete:"cascade"
-    //     })
-    // }
+    schedule.associate=(model)=>{
+        schedule.belongsTo(model.doctor,{
+            foreignKey:"doctorId",
+            onDelete:"cascade"
+        })
+    }
     return schedule;
 }

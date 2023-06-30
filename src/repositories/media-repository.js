@@ -19,7 +19,6 @@ export default {
                 mediaType,
                 mediaFor,
             }
-            console.log("file.filename");
             result = await media.create(mediaData);
             return result;
         } catch (error) {
