@@ -98,6 +98,7 @@ export default {
    * @returns
    */
     async becomeDoctor(req, email) {
+        let doctorSpecializationData;
         const transaction = await model.sequelize.transaction();
         try {
             const userResult = await user.findOne({ where: { email } });
@@ -109,7 +110,7 @@ export default {
                     userId: userResult.dataValues.id
                 }, { transaction });
 
-                await doctorSpecialization.create({
+                let doctorSpecializationData = await doctorSpecialization.create({
                     userId: userResult.dataValues.id,
                     specializationId: req.specializationId
                 }, { transaction })
@@ -118,7 +119,8 @@ export default {
                     where: { role: commonConstant.ROLE.DOCTOR }
                 });
 
-                await userRole.update({ roleId: roleData.id },
+            //    console.log(roleData.id)
+                let userRoles = await userRole.update({ roleId: roleData.id },
                     {
                         where: { userId: userResult.dataValues.id }
                     }, { transaction })
@@ -176,7 +178,11 @@ export default {
             //     { transaction });
 
             await transaction.commit();
-            return result, output;
+            return {
+                    ...userData,
+                    doctorData,
+                    
+            };
         } catch (error) {
             await transaction.rollback();
             throw Error(error);

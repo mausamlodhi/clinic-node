@@ -33,14 +33,12 @@ module.exports = (sequelize, DataTypes) => {
             trim: true,
             unique: true
         },
-
     },
         {
             timestamps: false,
             underscored: true,
         }
     );
-
     clinic.associate = (models) => {
         clinic.hasMany(models.patient, {
             foreignKey: 'clinic_id',

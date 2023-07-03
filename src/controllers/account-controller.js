@@ -44,6 +44,7 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
+            //console.log(user)
             if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -83,10 +84,17 @@ export default {
             next(error);
         }
     },
+
+    /**
+        * admin login
+        * @param {Object} req
+        * @param {Object} res
+        * @param {Function} next
+        */
+
     async signOut(req,res,next){
         try{
             const data = req.body.id;
-            console.log(data);
             const result=await accountRepository.signOut(data);
             res.status(httpStatus.OK).json({data:[],success:true});
         }catch(error){
@@ -106,16 +114,10 @@ export default {
                     success: false,
                     data: [],
                 });
-            } else if(user.status === 'badpassword') {
-                res.status(HttpStatus.UNAUTHORIZED).json({
-                    success: false,
-                    data: [],
-                })
-            }
-            else {
+            } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
-                    data: [],
+                    msg: "Email or password is incorrect"
                 });
             }
         } catch (error) {
@@ -145,14 +147,14 @@ export default {
     async updateProfile(req, res, next) {
         try {
             const updatedUser = await accountRepository.updateProfile(req.body, req.body.email);
-            if(updatedUser){
+            if (updatedUser) {
                 return res.status(HttpStatus.OK).json({
                     success: true,
                     message: "Profile Updated..."
                 })
             }
         } catch (error) {
-            res.status(httpStatus.OK).json({success:true,data:[]});
+            res.status(httpStatus.OK).json({ success: true, data: [] });
             next(error);
         }
     }
