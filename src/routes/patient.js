@@ -11,7 +11,7 @@ const { validateMiddleware } = middlewares;
 router.post(
   "/become-patient",
   // validateMiddleware({
-  //   schema: updateProfileValidator.becomePatientProfileSchema,
+  //   schema: updateProfileValidator.updatePatientProfileSchema,
   // }),
   patientController.becomePatient
 );

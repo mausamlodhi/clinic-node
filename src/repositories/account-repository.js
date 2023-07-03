@@ -6,6 +6,7 @@ import utility from "../services/utility";
 import Email from "../services/email";
 
 const { commonConstant } = constant;
+
 const { user, role, userRole, doctor, doctorSpecialization, patient } = models;
 export default {
   /**
@@ -23,7 +24,7 @@ export default {
   },
   async checkLogin(req) {
     try {
-      let doctorData, doctorSpecializationData, patientData;
+      let doctorData, doctorSpecializationData;
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
       const userRoles = await userRole.findOne({
@@ -35,6 +36,7 @@ export default {
           userResult.password
         );
         if (isPasswordMatch) {
+          // here token will be created and send the reponse
           const { ...userData } = userResult.get();
           const token = jwt.createToken({
             name: userData?.name,
@@ -45,19 +47,23 @@ export default {
             { token },
             { where: { id: userResult.id } }
           );
-
+          // user.findOne({ where: { id: userResult.id } })
+          //   .on('success', function (project) {
+          //     // Check if record exists in db
+          //     if (project) {
+          //       project.update({
+          //         token:newToken,
+          //       })
+          //         .success(function () { })
+          //     }
+          //   })
           if (userRoles.roleId == 2) {
             doctorData = await doctor.findOne({
               where: { userId: userResult.id },
+              // include: [{ model: user }],
             });
             await doctorSpecialization.findAll({
               where: { doctorId: doctorData.id },
-            });
-          }
-          if (userRoles.roleId == 3) {
-            patientData = await patient.findOne({
-              where: { userId: userResult.id },
-              include: [{ model: user }],
             });
           }
           return {
@@ -65,7 +71,6 @@ export default {
             ...userData,
             roleId: userRoles.roleId,
             doctorData,
-            patientData,
             doctorSpecializationData,
           };
         }
@@ -84,7 +89,6 @@ export default {
       throw Error(error);
     }
   },
-
   async signout(req, res, next) {
     try {
       const isValid = await this.verifyUser(req.body.credential);
@@ -98,15 +102,13 @@ export default {
     }
   },
   async adminLogin(req, res, next) {
-    console.log(res);
     try {
       const { email, password } = req.body;
-      console.log(req.body);
       const userResult = await user.findOne({ where: { email: email } });
-      const adminData = await userRole.findOne({
-        where: { userId: userResult?.id, roleId: 1 },
-      });
-      if (adminData) {
+      // const adminData = await userRole.findOne({
+      //   where: { userId: userResult.userId },
+      // });
+      if (userResult) {
         const isPasswordMatch = await bcrypt.compare(
           password,
           userResult.password
@@ -114,7 +116,9 @@ export default {
         if (isPasswordMatch) {
           const { ...userData } = userResult.get();
           const token = jwt.createToken(userData);
-          return { token, ...userData };
+          return { ...userData, token };
+        } else {
+          return { status: "badpassword" };
         }
       } else {
         return { status: commonConstant.STATUS.INVALID };
@@ -136,6 +140,7 @@ export default {
       });
       if (!userResult) {
         const bodyData = req.body;
+        //let hashPassword= this.createHashPassword(bodyData.password);
         const salt = await bcrypt.genSalt();
         const hashPassword = await bcrypt.hash(bodyData.password, salt);
         bodyData.password = hashPassword;
@@ -169,13 +174,16 @@ export default {
         req.forgotUser = userResult;
         const data = {
           to: userResult.dataValues.email,
+          // name: `${userResult.dataValues.firstName} ${userResult.dataValues.lastName}`,
         };
-        return true;
-      } else {
-        return false;
+        const result = await this.generatePasswordResetToken(req);
+        data.token = result.passwordResetToken;
+        return await Email.sendOtp(data)
+          .then(() => ({ status: "sent" }))
+          .catch((error) => ({ status: "send_error", error }));
       }
+      return false;
     } catch (error) {
-      await transaction.rollback();
       throw Error(error);
     }
   },
@@ -225,20 +233,28 @@ export default {
       throw Error(error);
     }
   },
-
-  async updateProfile(data, email) {
+  async getUserData(email) {
+    try {
+      const userData = await user.findOne({ email });
+      return userData;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+  async updateProfile(data, userEmail) {
     try {
       const userData = await this.getUserData(userEmail);
       let firstName = data?.firstName || userData.firstName;
       let lastName = data?.lastName || userData.lastName;
-      let contact = data?.contact || userData?.contact;
+      let phoneNumber = data?.phoneNumber || userData?.phoneNumber;
       let gender = data?.gender || userData?.gender;
+      const bodyData = { firstName, lastName, phoneNumber, gender };
+      const condition = { where: { email: userEmail } };
       const result = await user?.update(
-        { firstName, lastName, phoneNumber: contact, gender },
-        { where: { email: userData.email } }
+        { ...bodyData },
+        { where: { id: userData.id } }
       );
-
-      return result;
+      return result[0];
     } catch (error) {
       throw Error(error);
     }

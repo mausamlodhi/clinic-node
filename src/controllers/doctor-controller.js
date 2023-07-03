@@ -85,15 +85,13 @@ export default {
               * @param {Object} res
               * @param {Function} next
               */
-    async   updateDoctorProfile(req, res, next) {
-        // console.log("==================================")
-        // console.log(req.body)
+    async updateDoctorProfile(req, res, next) {
         try {
             const updatedUser = await doctorRepository.updateProfile(req.body);
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: updatedUser,
+                    data: null,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
@@ -113,13 +111,12 @@ export default {
               * @param {Function} next
               */
     async becomeDoctor(req, res, next) {
-        // console.log(req.body)
         try {
             const updatedUser = await doctorRepository.becomeDoctor(req.body, req.body.email);
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: updatedUser,
+                    data: null,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
