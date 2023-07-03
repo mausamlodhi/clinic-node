@@ -10,18 +10,18 @@ const { validateMiddleware } = middlewares;
 
 router.post(
     '/become-doctor',
-    // validateMiddleware({
-    //     schema: updateProfileValidator.updateDoctorProfileSchema
-    // }),
+    validateMiddleware({
+        schema: updateProfileValidator.updateDoctorProfileSchema
+    }),
     doctorController.becomeDoctor
 );
 
 
 router.post(
     '/update-profile/doctor',
-    // validateMiddleware({
-    //     schema: updateProfileValidator.updateDoctorProfileSchema
-    // }),
+    validateMiddleware({
+        schema: updateProfileValidator.updateDoctorProfileSchema
+    }),
     doctorController.updateDoctorProfile
 );
 

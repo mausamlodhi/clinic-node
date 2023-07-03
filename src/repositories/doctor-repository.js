@@ -39,11 +39,11 @@ export default {
         }
     },
 
-    /**
-  * get doctor list on certain condition
-  * @param {Object} req
-  * @returns
-  */
+     /**
+   * get doctor list on certain condition
+   * @param {Object} req
+   * @returns
+   */
     async getDoctorListCondition(req) {
         try {
             const { query: { experience, specializationId } } = req;
@@ -92,47 +92,40 @@ export default {
         }
     },
 
-    /**
-  *update profile become doctor
-  * @param {Object} req
-  * @returns
-  */
+     /**
+   *update profile become doctor
+   * @param {Object} req
+   * @returns
+   */
     async becomeDoctor(req, email) {
         let doctorSpecializationData;
         const transaction = await model.sequelize.transaction();
         try {
             const userResult = await user.findOne({ where: { email } });
             if (userResult) {
-                const { ...userData } = userResult.get();
-                let doctorData = await doctor.create({
+                await doctor.create({
                     dateOfBirth: req.dateOfBirth,
                     address: req.address,
                     experience: req.experience,
                     userId: userResult.dataValues.id
                 }, { transaction });
 
-                for (const specializationId of req.selectedSpecializations) {
-                    doctorSpecializationData = await doctorSpecialization.create({
-                        doctorId: doctorData.id,
-                        specializationId: specializationId,
-                    }, { transaction });
-                }
+                let doctorSpecializationData = await doctorSpecialization.create({
+                    userId: userResult.dataValues.id,
+                    specializationId: req.specializationId
+                }, { transaction })
+
                 const roleData = await role.findOne({
                     where: { role: commonConstant.ROLE.DOCTOR }
                 });
 
+            //    console.log(roleData.id)
                 let userRoles = await userRole.update({ roleId: roleData.id },
                     {
                         where: { userId: userResult.dataValues.id }
-                    }, { transaction });
-
+                    }, { transaction })
                 await transaction.commit();
-                return {
-                    ...userData,
-                    roleId: roleData.id,
-                    doctorData,
-                    doctorSpecializationData
-                };
+                return true;
             }
             else {
                 return false;
@@ -144,17 +137,16 @@ export default {
         }
     },
 
-    /**
-  * update doctor profile detail
-  * @param {Object} req
-  * @returns
-  */
+     /**
+   * update doctor profile detail
+   * @param {Object} req
+   * @returns
+   */
     async updateProfile(data) {
         const transaction = await model.sequelize.transaction();
         try {
-            const userResult = await this.getUserData(data.email);
-            const { ...userData } = userResult.get();
-            const doctorData = await this.getDoctorData(userResult.dataValues.id);
+            const userData = await this.getUserData(data.email);
+            const doctorData = await this.getDoctorData(userData.dataValues.id);
             //const doctorSpecializationData = await this.getDoctorSpecializationData(userData.dataValues.id);
             const formattedDate = moment(doctorData.dateOfBirth).format('YYYY-MM-DD');
 
@@ -187,9 +179,9 @@ export default {
 
             await transaction.commit();
             return {
-                ...userData,
-                doctorData,
-
+                    ...userData,
+                    doctorData,
+                    
             };
         } catch (error) {
             await transaction.rollback();
@@ -205,7 +197,7 @@ export default {
             throw Error(error);
         }
     },
-
+    
     async getDoctorData(id) {
         try {
             const userData = await doctor.findOne({ where: { userId: id } });

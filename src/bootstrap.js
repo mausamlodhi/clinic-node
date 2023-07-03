@@ -54,8 +54,8 @@ export default class Bootstrap{
     connectDB(){
         const {sequelize} = model;
         sequelize.authenticate().then((res)=>{
-            sequelize.sync().then(()=>{console.log("")}).catch(err=>{console.log(err)})
-            console.log("\tDatabase connected");
+            sequelize.sync();
+            console.log("\n\t\tDo Your Work...!");
         }).catch((error)=>{
             throw error;
         })

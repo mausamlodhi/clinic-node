@@ -85,13 +85,13 @@ export default {
               * @param {Object} res
               * @param {Function} next
               */
-    async   updateDoctorProfile(req, res, next) {
+    async updateDoctorProfile(req, res, next) {
         try {
             const updatedUser = await doctorRepository.updateProfile(req.body);
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: updatedUser,
+                    data: null,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
@@ -116,7 +116,7 @@ export default {
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: updatedUser,
+                    data: null,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({

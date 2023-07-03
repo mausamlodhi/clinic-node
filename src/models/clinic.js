@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+
     const clinic = sequelize.define("clinic", {
         name: {
             type: DataTypes.STRING(255),
@@ -17,17 +18,16 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             trim: true,
         },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            trim: true
+        email:{
+            type:DataTypes.STRING,
+            allowNull:false,
+            trim:true
         },
-        password: {
-            type: DataTypes.STRING,
-            trim: true,
-            allowNull: false
+        password:{
+            type:DataTypes.STRING,
+            trim:true,
+            allowNull:false
         },
-
         image: {
             type: DataTypes.STRING(255),
             trim: true,
@@ -43,14 +43,15 @@ module.exports = (sequelize, DataTypes) => {
         clinic.hasMany(models.patient, {
             foreignKey: 'clinic_id',
         });
-        clinic.hasMany(models.patient, {
-            foreignKey: "id",
-            onDElete: "cascade"
+        clinic.hasMany(models.patient,{
+            foreignKey : "id",
+            onDElete : "cascade"
         })
-        clinic.hasMany(models.appointment, {
-            foreignKey: "clinicId",
-            onDelete: "cascade"
+        clinic.hasMany(models.appointment,{
+            foreignKey:"clinicId",
+            onDelete:"cascade"
         })
+        
     }
     return clinic;
 }

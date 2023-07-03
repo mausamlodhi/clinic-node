@@ -6,12 +6,11 @@ const { user, patient, role, userRole } = model;
 const { commonConstant } = constant;
 
 export default {
-
   /**
-  *get patient list
-  * @param {Object} req
-  * @returns
-  */
+   *get patient list
+   * @param {Object} req
+   * @returns
+   */
   async getPatientList(req) {
     let searchCriteriaPatient = {
       include: [{ model: user }],
@@ -21,10 +20,10 @@ export default {
   },
 
   /**
-  * update profile become patient
-  * @param {Object} req
-  * @returns
-  */
+   * update profile become patient
+   * @param {Object} req
+   * @returns
+   */
   async becomePatient(req, email) {
     const transaction = await model.sequelize.transaction();
     try {
