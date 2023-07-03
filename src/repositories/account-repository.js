@@ -20,7 +20,7 @@ export default {
             let doctorData, doctorSpecializationData;
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
-            //console.log(userResult.id); //user ki id
+            //console.log(userResult.id); //user's id
             const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
             // console.log(userRoles) // role id from role table
 
@@ -51,9 +51,9 @@ export default {
                     };
                 }
             }
-            else {
-                return { status: commonConstant.STATUS.INVALID };
-            }
+            // else {
+            //     return { status: commonConstant.STATUS.INVALID };
+            // }
         } catch (error) {
             console.log(error)
             throw Error(error);
@@ -134,10 +134,10 @@ export default {
                 return false;
             }
         } catch (error) {
+            console.log(error)
             await transaction.rollback();
             throw Error(error);
         }
-
     },
     async forgotPassword(req) {
         try {

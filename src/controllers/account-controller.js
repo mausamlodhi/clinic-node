@@ -51,8 +51,9 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
-            //console.log(user)
-            if (user?.token) {
+            // console.log(user)
+            // if (user?.token) {
+            if (user) {
                 res.status(HttpStatus.OK).json({
                     success: true,
                     data: user,
@@ -86,12 +87,12 @@ export default {
             next(error);
         }
     },
-    async signOut(req,res,next){
-        try{
+    async signOut(req, res, next) {
+        try {
             const data = req.body.id;
-            const result=await accountRepository.signOut(data);
-            res.status(httpStatus.OK).json({data:[],success:true});
-        }catch(error){
+            const result = await accountRepository.signOut(data);
+            res.status(httpStatus.OK).json({ data: [], success: true });
+        } catch (error) {
             next(error);
         }
     },
@@ -106,7 +107,7 @@ export default {
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
-                    msg:"Email or password is incorrect"
+                    msg: "Email or password is incorrect"
                 });
             }
         } catch (error) {
