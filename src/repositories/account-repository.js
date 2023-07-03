@@ -27,14 +27,26 @@ export default {
       let doctorData, doctorSpecializationData;
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
-      const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
+      const userRoles = await userRole.findOne({
+        where: { userId: userResult.id },
+      });
       if (userResult) {
-        const isPasswordMatch = await bcrypt.compare(password, userResult.password);
+        const isPasswordMatch = await bcrypt.compare(
+          password,
+          userResult.password
+        );
         if (isPasswordMatch) {
           // here token will be created and send the reponse
           const { ...userData } = userResult.get();
-          const token = jwt.createToken({ name: userData?.name, email: userData?.email, password: userData?.password });
-          const updateToken = await user.update({ token }, { where: { id: userResult.id } });
+          const token = jwt.createToken({
+            name: userData?.name,
+            email: userData?.email,
+            password: userData?.password,
+          });
+          const updateToken = await user.update(
+            { token },
+            { where: { id: userResult.id } }
+          );
           // user.findOne({ where: { id: userResult.id } })
           //   .on('success', function (project) {
           //     // Check if record exists in db
@@ -50,18 +62,19 @@ export default {
               where: { userId: userResult.id },
               // include: [{ model: user }],
             });
-            await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
+            await doctorSpecialization.findAll({
+              where: { doctorId: doctorData.id },
+            });
           }
           return {
             token,
             ...userData,
             roleId: userRoles.roleId,
             doctorData,
-            doctorSpecializationData
+            doctorSpecializationData,
           };
         }
-      }
-      else {
+      } else {
         return { status: commonConstant.STATUS.INVALID };
       }
     } catch (error) {
@@ -92,16 +105,20 @@ export default {
     try {
       const { email, password } = req.body;
       const userResult = await user.findOne({ where: { email: email } });
+      // const adminData = await userRole.findOne({
+      //   where: { userId: userResult.userId },
+      // });
       if (userResult) {
         const isPasswordMatch = await bcrypt.compare(
           password,
           userResult.password
         );
         if (isPasswordMatch) {
-          // here token will be created and send the reponse
           const { ...userData } = userResult.get();
           const token = jwt.createToken(userData);
           return { ...userData, token };
+        } else {
+          return { status: "badpassword" };
         }
       } else {
         return { status: commonConstant.STATUS.INVALID };

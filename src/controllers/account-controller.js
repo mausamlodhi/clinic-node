@@ -106,7 +106,13 @@ export default {
                     success: false,
                     data: [],
                 });
-            } else {
+            } else if(user.status === 'badpassword') {
+                res.status(HttpStatus.UNAUTHORIZED).json({
+                    success: false,
+                    data: [],
+                })
+            }
+            else {
                 res.status(HttpStatus.BAD_REQUEST).json({
                     success: false,
                     data: [],
