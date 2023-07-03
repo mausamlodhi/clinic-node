@@ -20,13 +20,10 @@ export default {
             let doctorData, doctorSpecializationData;
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
-            //console.log(userResult.id); //user's id
             const userRoles = await userRole.findOne({ where: { userId: userResult.id } });
-            // console.log(userRoles) // role id from role table
 
             if (userResult) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
-                //console.log(isPasswordMatch)
                 if (isPasswordMatch) {
                     // here token will be created and send the reponse 
                     const { ...userData } = userResult.get();
@@ -37,9 +34,7 @@ export default {
                             where: { userId: userResult.id },
                             // include: [{ model: user }],
                         });
-                        // console.log(doctorData)
                         await doctorSpecialization.findAll({ where: { doctorId: doctorData.id } });
-                        // console.log(doctorSpecializationData);
                     }
 
                     return {
@@ -55,7 +50,6 @@ export default {
             //     return { status: commonConstant.STATUS.INVALID };
             // }
         } catch (error) {
-            console.log(error)
             throw Error(error);
         }
     },
@@ -83,9 +77,7 @@ export default {
         try {
             const { email, password } = req.body;
             const userResult = await user.findOne({ where: { email: email } });
-
             const userRoles = await userRole.findOne({where:{role_id: 1}});
-            // console.log(userRoles.roleId);
             
             if (userResult && userRoles.roleId==1) {
                 const isPasswordMatch = await bcrypt.compare(password, userResult.password);
@@ -134,7 +126,6 @@ export default {
                 return false;
             }
         } catch (error) {
-            console.log(error)
             await transaction.rollback();
             throw Error(error);
         }
@@ -205,7 +196,6 @@ export default {
     },
 
     async updateProfile(data, email) {
-        console.log(email)
         try {
             const userData = await user.findOne({ where: { email: email } });
             let firstName = data?.firstName || userData.firstName;
@@ -214,7 +204,6 @@ export default {
             let gender = data?.gender || userData?.gender;
             const result = await user?.update({ firstName, lastName, phoneNumber: contact, gender },
                 { where: { email: userData.email } });
-            //console.log(result);
             return result;
         } catch (error) {
             throw Error(error);

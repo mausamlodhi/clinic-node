@@ -1,6 +1,8 @@
 import model from "../models";
 import constants from "../constants";
+
 const {schedule} = model;
+
 export default{
     async getTime(durationTime,wholeDayTime,doctorId){
         try{

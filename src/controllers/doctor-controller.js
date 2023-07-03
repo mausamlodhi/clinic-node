@@ -86,8 +86,6 @@ export default {
               * @param {Function} next
               */
     async   updateDoctorProfile(req, res, next) {
-        // console.log("==================================")
-        // console.log(req.body)
         try {
             const updatedUser = await doctorRepository.updateProfile(req.body);
             if (updatedUser) {
@@ -113,7 +111,6 @@ export default {
               * @param {Function} next
               */
     async becomeDoctor(req, res, next) {
-        // console.log(req.body)
         try {
             const updatedUser = await doctorRepository.becomeDoctor(req.body, req.body.email);
             if (updatedUser) {

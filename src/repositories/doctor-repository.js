@@ -98,10 +98,10 @@ export default {
   * @returns
   */
     async becomeDoctor(req, email) {
+        let doctorSpecializationData;
         const transaction = await model.sequelize.transaction();
         try {
             const userResult = await user.findOne({ where: { email } });
-
             if (userResult) {
                 const { ...userData } = userResult.get();
                 let doctorData = await doctor.create({
@@ -111,16 +111,16 @@ export default {
                     userId: userResult.dataValues.id
                 }, { transaction });
 
-                let doctorSpecializationData = await doctorSpecialization.create({
-                    userId: userResult.dataValues.id,
-                    specializationId: req.specializationId
-                }, { transaction })
-
+                for (const specializationId of req.selectedSpecializations) {
+                    doctorSpecializationData = await doctorSpecialization.create({
+                        doctorId: doctorData.id,
+                        specializationId: specializationId,
+                    }, { transaction });
+                }
                 const roleData = await role.findOne({
                     where: { role: commonConstant.ROLE.DOCTOR }
                 });
 
-            //    console.log(roleData.id)
                 let userRoles = await userRole.update({ roleId: roleData.id },
                     {
                         where: { userId: userResult.dataValues.id }
@@ -138,7 +138,6 @@ export default {
                 return false;
             }
         } catch (error) {
-            console.log(error)
             await transaction.rollback();
             throw Error(error);
 
@@ -174,7 +173,6 @@ export default {
                 { where: { email: userData.email } },
                 { transaction });
 
-                // console.log(result)
             const output = await doctor?.update({
                 dateOfBirth: formattedDate,
                 address, experience
@@ -189,9 +187,9 @@ export default {
 
             await transaction.commit();
             return {
-                    ...userData,
-                    doctorData,
-                    
+                ...userData,
+                doctorData,
+
             };
         } catch (error) {
             await transaction.rollback();

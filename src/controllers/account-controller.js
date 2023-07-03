@@ -51,7 +51,6 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
-            // console.log(user)
             // if (user?.token) {
             if (user) {
                 res.status(HttpStatus.OK).json({
