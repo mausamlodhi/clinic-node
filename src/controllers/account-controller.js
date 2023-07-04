@@ -44,7 +44,6 @@ export default {
     async login(req, res, next) {
         try {
             const user = await accountRepository.checkLogin(req);
-            //console.log(user)
             if (user?.token) {
                 res.status(HttpStatus.OK).json({
                     success: true,
@@ -124,7 +123,7 @@ export default {
             next(error);
         }
     },
-    async resetPassword(req, res) {
+    async resetPassword(req, res,next) {
         try {
             const user = await accountRepository.resetPassword(req);
             if (user) {
@@ -140,7 +139,6 @@ export default {
                 });
             }
         } catch (error) {
-
             next(error);
         }
     },

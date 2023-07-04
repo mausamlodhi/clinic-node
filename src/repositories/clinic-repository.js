@@ -85,7 +85,6 @@ export default {
       const result = await clinic.create({ name, address, contact, image,email,password:newPassword });
       return result;
     } catch (error) {
-      console.log(error);
       throw Error(error);
     }
   },

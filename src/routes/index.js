@@ -6,6 +6,8 @@ import admin from './admin';
 import schedules from "./schedule";
 import appointment from "./appointment";
 import HttpStatus from 'http-status';
+import doctor from './doctor';
+import patient from './patient';
 
 const router = Router();
 const register = (app) => {
@@ -16,7 +18,9 @@ const register = (app) => {
         user,
         admin,
         schedules,
-        appointment
+        appointment,
+        doctor,
+        patient
     ]);
 
   app.use((error, req, res, next) => {

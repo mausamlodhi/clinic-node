@@ -37,7 +37,7 @@ router.post(
 );
 
 router.post(
-'/account/reset-password/:id',
+'/account/reset-password',
  accountController.resetPassword
  );
 

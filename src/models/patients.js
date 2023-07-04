@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
            onDelete:"cascade" 
         }),
         patient.belongsTo(models.clinic, {
-          foreignKey: 'clinic_id',
+          foreignKey: 'clinicId',
         });
     }
     return patient;

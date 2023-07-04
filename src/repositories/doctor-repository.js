@@ -119,7 +119,6 @@ export default {
                     where: { role: commonConstant.ROLE.DOCTOR }
                 });
 
-            //    console.log(roleData.id)
                 let userRoles = await userRole.update({ roleId: roleData.id },
                     {
                         where: { userId: userResult.dataValues.id }
