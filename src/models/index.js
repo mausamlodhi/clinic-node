@@ -6,7 +6,7 @@ import config from '../config';
 const dbConfig = config.database.mysql;
 
 const db = {};
-const sequelize = new Sequelize(dbConfig.db, dbConfig.user, dbConfig.password, {
+const sequelize = new Sequelize(dbConfig.db, dbConfig.user, '', {
   host: dbConfig.host,
   port: dbConfig.port,
   dialect: 'mysql',

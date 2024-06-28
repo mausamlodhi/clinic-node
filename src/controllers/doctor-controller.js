@@ -91,7 +91,7 @@ export default {
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: null,
+                    data: updatedUser,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({
@@ -116,7 +116,7 @@ export default {
             if (updatedUser) {
                 res.status(HttpStatus.OK).json({
                     success: true,
-                    data: null,
+                    data: updatedUser,
                 });
             } else {
                 res.status(HttpStatus.BAD_REQUEST).json({

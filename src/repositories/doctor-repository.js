@@ -39,11 +39,11 @@ export default {
         }
     },
 
-     /**
-   * get doctor list on certain condition
-   * @param {Object} req
-   * @returns
-   */
+    /**
+  * get doctor list on certain condition
+  * @param {Object} req
+  * @returns
+  */
     async getDoctorListCondition(req) {
         try {
             const { query: { experience, specializationId } } = req;
@@ -92,28 +92,31 @@ export default {
         }
     },
 
-     /**
-   *update profile become doctor
-   * @param {Object} req
-   * @returns
-   */
+    /**
+  *update profile become doctor
+  * @param {Object} req
+  * @returns
+  */
     async becomeDoctor(req, email) {
         let doctorSpecializationData;
         const transaction = await model.sequelize.transaction();
         try {
             const userResult = await user.findOne({ where: { email } });
             if (userResult) {
-                await doctor.create({
+                const { ...userData } = userResult.get();
+                let doctorData = await doctor.create({
                     dateOfBirth: req.dateOfBirth,
                     address: req.address,
                     experience: req.experience,
                     userId: userResult.dataValues.id
                 }, { transaction });
 
-                let doctorSpecializationData = await doctorSpecialization.create({
-                    userId: userResult.dataValues.id,
-                    specializationId: req.specializationId
-                }, { transaction })
+                for (const specializationId of req.selectedSpecializations) {
+                    doctorSpecializationData = await doctorSpecialization.create({
+                        doctorId: doctorData.id,
+                        specializationId: specializationId,
+                    }, { transaction });
+                }
 
                 const roleData = await role.findOne({
                     where: { role: commonConstant.ROLE.DOCTOR }
@@ -124,7 +127,12 @@ export default {
                         where: { userId: userResult.dataValues.id }
                     }, { transaction })
                 await transaction.commit();
-                return true;
+                return {
+                    ...userData,
+                    roleId: roleData.id,
+                    doctorData,
+                    doctorSpecializationData
+                };
             }
             else {
                 return false;
@@ -132,15 +140,14 @@ export default {
         } catch (error) {
             await transaction.rollback();
             throw Error(error);
-
         }
     },
 
-     /**
-   * update doctor profile detail
-   * @param {Object} req
-   * @returns
-   */
+    /**
+  * update doctor profile detail
+  * @param {Object} req
+  * @returns
+  */
     async updateProfile(data) {
         const transaction = await model.sequelize.transaction();
         try {
@@ -165,7 +172,7 @@ export default {
                 { transaction });
 
             const output = await doctor?.update({
-                dateOfBirth: formattedDate,
+                dateOfBirth,
                 address, experience
             }, { where: { userId: doctorData.userId } },
                 { transaction });
@@ -175,13 +182,23 @@ export default {
             // },
             //     { where: { userId: doctorData.userId } },
             //     { transaction });
-
-            await transaction.commit();
-            return {
-                    ...userData,
-                    doctorData,
-                    
+            const updatedData = {
+                userData: {
+                    ...userData.dataValues,
+                    firstName,
+                    lastName,
+                    contact,
+                    gender,
+                    doctorData: {
+                        ...doctorData.dataValues,
+                        dateOfBirth,
+                        address,
+                        experience
+                    }
+                },
             };
+            await transaction.commit();
+            return updatedData;
         } catch (error) {
             await transaction.rollback();
             throw Error(error);
@@ -196,7 +213,7 @@ export default {
             throw Error(error);
         }
     },
-    
+
     async getDoctorData(id) {
         try {
             const userData = await doctor.findOne({ where: { userId: id } });
